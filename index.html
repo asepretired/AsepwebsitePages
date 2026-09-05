@@ -1,612 +1,915 @@
-<!DOCTYPE html>
-<html lang="id" class="dark">
+<!DOCTYPE html><html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asep AI — GPT-5.3 Ultra Intelligence</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            950: '#05070d',
-                            900: '#0a0f1d',
-                            850: '#0e1529',
-                            800: '#141c36',
-                        },
-                        accent: {
-                            primary: '#06b6d4',
-                            secondary: '#6366f1',
-                            glow: '#38bdf8'
-                        }
+    <title>Asep AI — Ultra Intelligence</title><script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    dark: {
+                        950: '#05070d',
+                        900: '#0a0f1d',
+                        850: '#0e1529',
+                        800: '#141c36',
                     },
-                    boxShadow: {
-                        'neon-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.35)',
-                        'neon-glow': '0 0 35px -5px rgba(99, 102, 241, 0.25)',
+                    accent: {
+                        primary: '#06b6d4',
+                        secondary: '#6366f1',
+                        glow: '#38bdf8'
                     }
+                },
+                boxShadow: {
+                    'neon-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.35)',
+                    'neon-glow': '0 0 35px -5px rgba(99, 102, 241, 0.25)',
                 }
             }
         }
-    </script>
-    
-    <!-- Font Awesome Icons & Google Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Marked.js untuk Markdown AI -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    }
+</script>
 
-    <style>
-        * {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+    * {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    code, pre, .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    body {
+        background-color: #05070d;
+        background-image: 
+            radial-gradient(circle at 15% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+            radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.14) 0%, transparent 45%),
+            radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.05) 0%, transparent 60%);
+        background-attachment: fixed;
+    }
+
+    .glass-header {
+        background: rgba(10, 15, 29, 0.82);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .glass-panel {
+        background: rgba(14, 21, 41, 0.65);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card {
+        background: rgba(18, 27, 51, 0.45);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+        background: rgba(22, 33, 62, 0.7);
+        border-color: rgba(6, 182, 212, 0.35);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    .markdown-body {
+        line-height: 1.7;
+    }
+
+    .markdown-body p {
+        margin-bottom: 0.85rem;
+    }
+
+    .markdown-body p:last-child {
+        margin-bottom: 0;
+    }
+
+    .markdown-body ul {
+        list-style-type: disc;
+        margin-left: 1.4rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .markdown-body ol {
+        list-style-type: decimal;
+        margin-left: 1.4rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .markdown-body li {
+        margin-bottom: 0.25rem;
+    }
+
+    .markdown-body strong {
+        color: #38bdf8;
+        font-weight: 600;
+    }
+
+    .markdown-body code:not(pre code) {
+        background: rgba(6, 182, 212, 0.12);
+        border: 1px solid rgba(6, 182, 212, 0.25);
+        padding: 0.2rem 0.45rem;
+        border-radius: 0.4rem;
+        font-size: 0.84em;
+        color: #67e8f9;
+    }
+
+    .markdown-body pre {
+        background: #080c16;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0.85rem;
+        padding: 1rem;
+        overflow-x: auto;
+        margin: 1rem 0;
+        font-size: 0.85rem;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .dot-pulse {
+        animation: modernPulse 1.4s infinite ease-in-out both;
+    }
+
+    .dot-pulse:nth-child(1) {
+        animation-delay: -0.32s;
+    }
+
+    .dot-pulse:nth-child(2) {
+        animation-delay: -0.16s;
+    }
+
+    @keyframes modernPulse {
+        0%, 80%, 100% {
+            transform: scale(0.6);
+            opacity: 0.3;
         }
 
-        code, pre, .font-mono {
-            font-family: 'JetBrains Mono', monospace;
+        40% {
+            transform: scale(1.1);
+            opacity: 1;
+            filter: drop-shadow(0 0 6px #22d3ee);
         }
+    }
+</style>
 
-        /* Ambient Glow & Deep Space Background */
-        body {
-            background-color: #05070d;
-            background-image: 
-                radial-gradient(circle at 15% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
-                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.14) 0%, transparent 45%),
-                radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.05) 0%, transparent 60%);
-            background-attachment: fixed;
-        }
+</head><body class="h-screen flex flex-col justify-between overflow-hidden text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200"><!-- Header -->
+<header class="w-full glass-header px-5 md:px-12 py-3.5 flex items-center justify-between z-30">
 
-        /* Modern Glassmorphism System */
-        .glass-header {
-            background: rgba(10, 15, 29, 0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        }
+    <div class="flex items-center space-x-3.5">
+        <div class="relative group cursor-pointer">
+            <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300 animate-pulse"></div>
 
-        .glass-panel {
-            background: rgba(14, 21, 41, 0.65);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .glass-card {
-            background: rgba(18, 27, 51, 0.45);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .glass-card:hover {
-            background: rgba(22, 33, 62, 0.7);
-            border-color: rgba(6, 182, 212, 0.35);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.15);
-        }
-
-        /* Modern Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        /* Markdown Typography & Bubble Styling */
-        .markdown-body {
-            line-height: 1.7;
-        }
-        .markdown-body p { margin-bottom: 0.85rem; }
-        .markdown-body p:last-child { margin-bottom: 0; }
-        .markdown-body ul { list-style-type: disc; margin-left: 1.4rem; margin-bottom: 0.85rem; }
-        .markdown-body ol { list-style-type: decimal; margin-left: 1.4rem; margin-bottom: 0.85rem; }
-        .markdown-body li { margin-bottom: 0.25rem; }
-        .markdown-body strong { color: #38bdf8; font-weight: 600; }
-        .markdown-body code:not(pre code) {
-            background: rgba(6, 182, 212, 0.12);
-            border: 1px solid rgba(6, 182, 212, 0.25);
-            padding: 0.2rem 0.45rem;
-            border-radius: 0.4rem;
-            font-size: 0.84em;
-            color: #67e8f9;
-        }
-        .markdown-body pre {
-            background: #080c16;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.85rem;
-            padding: 1rem;
-            overflow-x: auto;
-            margin: 1rem 0;
-            font-size: 0.85rem;
-            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Pulsing Dots Loader */
-        .dot-pulse {
-            animation: modernPulse 1.4s infinite ease-in-out both;
-        }
-        .dot-pulse:nth-child(1) { animation-delay: -0.32s; }
-        .dot-pulse:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes modernPulse {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
-            40% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 6px #22d3ee); }
-        }
-    </style>
-</head>
-<body class="h-screen flex flex-col justify-between overflow-hidden text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
-
-    <!-- Header Navigation -->
-    <header class="w-full glass-header px-5 md:px-12 py-3.5 flex items-center justify-between z-30">
-        <!-- Logo & Model Info -->
-        <div class="flex items-center space-x-3.5">
-            <div class="relative group cursor-pointer">
-                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-sky-500 to-indigo-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300 animate-pulse"></div>
-                <div class="relative w-11 h-11 rounded-2xl bg-dark-900 border border-white/15 flex items-center justify-center shadow-inner">
-                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 text-lg"></i>
-                </div>
-            </div>
-            <div>
-                <div class="flex items-center gap-2">
-                    <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
-                        Asep<span class="text-cyan-400">AI</span>
-                    </h1>
-                    <span class="text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full font-mono font-semibold bg-gradient-to-r from-cyan-500/20 to-indigo-500/20 text-cyan-300 border border-cyan-500/30">
-                        GPT-5.3
-                    </span>
-                </div>
-                <p class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span>High-Speed Neural Network</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- Limit & Voucher Action -->
-        <div class="flex items-center space-x-3">
-            <div class="glass-panel px-3.5 py-1.5 rounded-xl flex items-center space-x-2 border border-slate-700/60 shadow-sm">
-                <i class="fa-solid fa-bolt-lightning text-amber-400 text-xs"></i>
-                <span class="text-xs text-slate-400 font-medium">Limit:</span>
-                <span id="limitCount" class="text-xs font-bold text-cyan-400 font-mono tracking-wider">2</span>
-            </div>
-            <button onclick="openModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white transition-all shadow-md shadow-cyan-500/20 flex items-center gap-1.5 active:scale-95">
-                <i class="fa-solid fa-gift"></i>
-                <span>Voucher</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Chat Stream Area -->
-    <main id="chatBox" class="flex-1 overflow-y-auto px-4 py-8 md:px-20 lg:px-64 space-y-6 scroll-smooth">
-        <!-- Modern Welcome / Dashboard Hub -->
-        <div id="welcomeScreen" class="min-h-[70vh] flex flex-col items-center justify-center text-center max-w-2xl mx-auto py-6">
-            
-            <div class="relative mb-6">
-                <div class="absolute -inset-3 bg-gradient-to-r from-cyan-500/30 to-indigo-600/30 rounded-full blur-2xl opacity-80"></div>
-                <div class="relative w-20 h-20 rounded-3xl bg-dark-900 border border-white/15 flex items-center justify-center text-cyan-400 shadow-2xl">
-                    <i class="fa-solid fa-atom text-3xl animate-spin" style="animation-duration: 20s;"></i>
-                </div>
-            </div>
-
-            <h2 class="text-3xl md:text-4xl font-black tracking-tight text-white mb-2.5">
-                Ada yang bisa dibantu, <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Kawan?</span>
-            </h2>
-            <p class="text-slate-400 text-xs md:text-sm max-w-md mx-auto mb-8 leading-relaxed">
-                Kini ditenagai <strong class="text-cyan-300 font-semibold">GPT-5.3 Engine</strong> untuk penalaran instan, koding, dan jawaban akurat. Sisa kuota Anda: <span class="text-cyan-400 font-mono font-bold" id="welcomeLimitBadge">2 kueri</span>.
-            </p>
-
-            <!-- Quick Action Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full text-left">
-                <button onclick="quickPrompt('Buatkan roadmap belajar Web Development modern dari nol sampai mahir')" class="glass-card p-4 rounded-2xl group border border-white/5">
-                    <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xs mb-2">
-                        <i class="fa-solid fa-code"></i>
-                    </div>
-                    <span class="text-xs font-semibold text-slate-200 group-hover:text-cyan-300 block mb-0.5">Roadmap Web Dev</span>
-                    <p class="text-[11px] text-slate-500">Alur belajar front-end & back-end dari nol</p>
-                </button>
-
-                <button onclick="quickPrompt('Jelaskan konsep Quantum Computing seperti saya anak usia 10 tahun')" class="glass-card p-4 rounded-2xl group border border-white/5">
-                    <div class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs mb-2">
-                        <i class="fa-solid fa-lightbulb"></i>
-                    </div>
-                    <span class="text-xs font-semibold text-slate-200 group-hover:text-indigo-300 block mb-0.5">Penjelasan Simpel</span>
-                    <p class="text-[11px] text-slate-500">Konsep Quantum Computing untuk anak 10 tahun</p>
-                </button>
-
-                <button onclick="quickPrompt('Tuliskan 3 strategi pemasaran digital kreatif tanpa modal besar')" class="glass-card p-4 rounded-2xl group border border-white/5">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs mb-2">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <span class="text-xs font-semibold text-slate-200 group-hover:text-emerald-300 block mb-0.5">Digital Marketing</span>
-                    <p class="text-[11px] text-slate-500">3 strategi promosi cerdas tanpa modal besar</p>
-                </button>
-
-                <button onclick="quickPrompt('Buatkan skrip Python sederhana untuk scraping web berita otomatis')" class="glass-card p-4 rounded-2xl group border border-white/5">
-                    <div class="w-7 h-7 rounded-lg bg-fuchsia-500/10 text-fuchsia-400 flex items-center justify-center text-xs mb-2">
-                        <i class="fa-brands fa-python"></i>
-                    </div>
-                    <span class="text-xs font-semibold text-slate-200 group-hover:text-fuchsia-300 block mb-0.5">Python Scraping</span>
-                    <p class="text-[11px] text-slate-500">Contoh kode scraper web berita dengan BeautifulSoup</p>
-                </button>
+            <div class="relative w-11 h-11 rounded-2xl bg-dark-900 border border-white/15 flex items-center justify-center shadow-inner">
+                <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 text-lg"></i>
             </div>
         </div>
-    </main>
 
-    <!-- Floating Futuristic Input Dock -->
-    <footer class="p-4 md:px-20 lg:px-64 z-20">
-        <div class="max-w-4xl mx-auto">
-            <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-end glass-panel rounded-2xl p-2.5 border border-white/10 focus-within:border-cyan-500/60 focus-within:ring-2 focus-within:ring-cyan-500/20 shadow-2xl transition-all duration-300">
-                
-                <textarea 
-                    id="userInput"
-                    rows="1"
-                    placeholder="Ketik pesan Anda ke Asep AI (GPT-5.3)..." 
-                    class="w-full bg-transparent px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none max-h-36 overflow-y-auto leading-relaxed"
-                    onkeydown="handleKeyDown(event)"
-                    oninput="autoResize(this)"></textarea>
+        <div>
+            <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                Asep<span class="text-cyan-400">AI</span>
+            </h1>
 
-                <button 
-                    type="submit" 
-                    id="sendBtn"
-                    class="h-10 w-10 flex-shrink-0 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white flex items-center justify-center transition shadow-neon-cyan active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ml-2">
-                    <i class="fa-solid fa-paper-plane text-xs"></i>
-                </button>
-            </form>
-
-            <div class="flex justify-between items-center px-2.5 mt-2 text-[11px] text-slate-500">
-                <span class="flex items-center gap-1.5">
-                    <i class="fa-solid fa-microchip text-cyan-400"></i> Engine: <strong class="text-slate-400 font-semibold">GPT-5.3 Ultra</strong>
+            <p class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span id="warningQuota" class="hidden text-rose-400 font-medium animate-pulse flex items-center gap-1">
-                    <i class="fa-solid fa-circle-exclamation"></i> Kuota habis! Klik 'Voucher' di atas.
-                </span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Modal Voucher / Top Up -->
-    <div id="topupModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-dark-950/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-white/10 shadow-2xl relative transform transition-transform scale-95 duration-300" id="modalBox">
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-lg mb-4 shadow-neon-cyan">
-                <i class="fa-solid fa-key"></i>
-            </div>
-            
-            <h3 class="text-lg font-bold text-white mb-1">Aktivasi Voucher Kuota</h3>
-            <p class="text-xs text-slate-400 mb-5 leading-relaxed">
-                Masukkan kode voucher rahasia untuk langsung mendapatkan tambahan <span class="text-cyan-300 font-semibold">+10 Limit Pertanyaan</span>.
+                <span>High-Speed Neural Network</span>
             </p>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">Kode Voucher</label>
-                    <input 
-                        type="text" 
-                        id="topupCode"
-                        placeholder="Masukkan kode voucher..." 
-                        class="w-full bg-dark-900/90 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none transition font-mono tracking-wider"
-                    />
-                </div>
-
-                <div id="modalAlert" class="text-xs hidden font-medium p-3 rounded-xl border"></div>
-
-                <button 
-                    onclick="redeemCode()" 
-                    class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 font-semibold text-sm text-white shadow-neon-cyan transition active:scale-95 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-circle-check"></i> Klaim Kuota Sekarang
-                </button>
-            </div>
         </div>
     </div>
 
-    <!-- Script Application -->
-    <script>
-        const SECRET_CODE = "Rudiblack";
-        const DEFAULT_LIMIT = 2;
+    <!-- Limit & Voucher -->
+    <div class="flex items-center space-x-3">
+        <div class="glass-panel px-3.5 py-1.5 rounded-xl flex items-center space-x-2 border border-slate-700/60 shadow-sm">
+            <i class="fa-solid fa-bolt-lightning text-amber-400 text-xs"></i>
+            <span class="text-xs text-slate-400 font-medium">Limit:</span>
+            <span id="limitCount" class="text-xs font-bold text-cyan-400 font-mono tracking-wider">2</span>
+        </div>
 
-        // Inisialisasi Kuota
-        let currentLimit = localStorage.getItem('asep_ai_limit');
-        if (currentLimit === null) {
-            currentLimit = DEFAULT_LIMIT;
-            localStorage.setItem('asep_ai_limit', currentLimit);
+        <button
+            onclick="openModal()"
+            class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white transition-all shadow-md shadow-cyan-500/20 flex items-center gap-1.5 active:scale-95">
+            <i class="fa-solid fa-gift"></i>
+            <span>Voucher</span>
+        </button>
+    </div>
+</header>
+
+<!-- Chat -->
+<main id="chatBox" class="flex-1 overflow-y-auto px-4 py-8 md:px-20 lg:px-64 space-y-6 scroll-smooth">
+
+    <div id="welcomeScreen" class="min-h-[70vh] flex flex-col items-center justify-center text-center max-w-2xl mx-auto py-6">
+
+        <div class="relative mb-6">
+            <div class="absolute -inset-3 bg-gradient-to-r from-cyan-500/30 to-indigo-600/30 rounded-full blur-2xl opacity-80"></div>
+
+            <div class="relative w-20 h-20 rounded-3xl bg-dark-900 border border-white/15 flex items-center justify-center text-cyan-400 shadow-2xl">
+                <i class="fa-solid fa-atom text-3xl animate-spin" style="animation-duration: 20s;"></i>
+            </div>
+        </div>
+
+        <h2 class="text-3xl md:text-4xl font-black tracking-tight text-white mb-2.5">
+            Ada yang bisa dibantu,
+            <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">
+                Kawan?
+            </span>
+        </h2>
+
+        <p class="text-slate-400 text-xs md:text-sm max-w-md mx-auto mb-8 leading-relaxed">
+            Asisten AI cepat untuk penalaran, koding, dan berbagai kebutuhan Anda.
+            Sisa kuota Anda:
+            <span class="text-cyan-400 font-mono font-bold" id="welcomeLimitBadge">
+                2 kueri
+            </span>.
+        </p>
+
+        <!-- Quick Action Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 w-full text-left">
+
+            <button onclick="quickPrompt('Buatkan roadmap belajar Web Development modern dari nol sampai mahir')"
+                class="glass-card p-4 rounded-2xl group border border-white/5">
+
+                <div class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xs mb-2">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+
+                <span class="text-xs font-semibold text-slate-200 group-hover:text-cyan-300 block mb-0.5">
+                    Roadmap Web Dev
+                </span>
+
+                <p class="text-[11px] text-slate-500">
+                    Alur belajar front-end & back-end dari nol
+                </p>
+            </button>
+
+            <button onclick="quickPrompt('Jelaskan konsep Quantum Computing seperti saya anak usia 10 tahun')"
+                class="glass-card p-4 rounded-2xl group border border-white/5">
+
+                <div class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xs mb-2">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+
+                <span class="text-xs font-semibold text-slate-200 group-hover:text-indigo-300 block mb-0.5">
+                    Penjelasan Simpel
+                </span>
+
+                <p class="text-[11px] text-slate-500">
+                    Konsep Quantum Computing untuk anak 10 tahun
+                </p>
+            </button>
+
+            <button onclick="quickPrompt('Tuliskan 3 strategi pemasaran digital kreatif tanpa modal besar')"
+                class="glass-card p-4 rounded-2xl group border border-white/5">
+
+                <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs mb-2">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+
+                <span class="text-xs font-semibold text-slate-200 group-hover:text-emerald-300 block mb-0.5">
+                    Digital Marketing
+                </span>
+
+                <p class="text-[11px] text-slate-500">
+                    3 strategi promosi cerdas tanpa modal besar
+                </p>
+            </button>
+
+            <button onclick="quickPrompt('Buatkan skrip Python sederhana untuk scraping web berita otomatis')"
+                class="glass-card p-4 rounded-2xl group border border-white/5">
+
+                <div class="w-7 h-7 rounded-lg bg-fuchsia-500/10 text-fuchsia-400 flex items-center justify-center text-xs mb-2">
+                    <i class="fa-brands fa-python"></i>
+                </div>
+
+                <span class="text-xs font-semibold text-slate-200 group-hover:text-fuchsia-300 block mb-0.5">
+                    Python Scraping
+                </span>
+
+                <p class="text-[11px] text-slate-500">
+                    Contoh kode scraper web berita dengan BeautifulSoup
+                </p>
+            </button>
+
+        </div>
+    </div>
+</main>
+
+<!-- Input Dock -->
+<footer class="px-4 pt-2 pb-7 md:px-20 lg:px-64 z-20">
+    <div class="max-w-4xl mx-auto">
+
+        <form
+            id="chatForm"
+            onsubmit="handleChatSubmit(event)"
+            class="relative flex items-end glass-panel rounded-2xl p-2.5 border border-white/10 focus-within:border-cyan-500/60 focus-within:ring-2 focus-within:ring-cyan-500/20 shadow-2xl transition-all duration-300">
+
+            <textarea
+                id="userInput"
+                rows="1"
+                placeholder="Ketik pesan Anda ke Asep AI..."
+                class="w-full bg-transparent px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none max-h-36 overflow-y-auto leading-relaxed"
+                onkeydown="handleKeyDown(event)"
+                oninput="autoResize(this)"></textarea>
+
+            <button
+                type="submit"
+                id="sendBtn"
+                class="h-10 w-10 flex-shrink-0 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white flex items-center justify-center transition shadow-neon-cyan active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ml-2">
+
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+        </form>
+
+        <div class="flex justify-between items-center px-2.5 mt-2 text-[11px] text-slate-500">
+
+            <span class="flex items-center gap-1.5">
+                <i class="fa-solid fa-microchip text-cyan-400"></i>
+                Engine:
+                <strong class="text-slate-400 font-semibold">
+                    Asep AI
+                </strong>
+            </span>
+
+            <span id="warningQuota"
+                class="hidden text-rose-400 font-medium animate-pulse flex items-center gap-1">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                Kuota habis! Klik 'Voucher' di atas.
+            </span>
+        </div>
+    </div>
+</footer>
+
+<!-- Voucher Modal -->
+<div
+    id="topupModal"
+    class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-dark-950/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+
+    <div
+        class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-white/10 shadow-2xl relative transform transition-transform scale-95 duration-300"
+        id="modalBox">
+
+        <button
+            onclick="closeModal()"
+            class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition">
+
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-lg mb-4 shadow-neon-cyan">
+            <i class="fa-solid fa-key"></i>
+        </div>
+
+        <h3 class="text-lg font-bold text-white mb-1">
+            Aktivasi Voucher Kuota
+        </h3>
+
+        <p class="text-xs text-slate-400 mb-5 leading-relaxed">
+            Masukkan kode voucher rahasia untuk langsung mendapatkan tambahan
+            <span class="text-cyan-300 font-semibold">
+                +10 Limit Pertanyaan
+            </span>.
+        </p>
+
+        <div class="space-y-4">
+
+            <div>
+                <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">
+                    Kode Voucher
+                </label>
+
+                <input
+                    type="text"
+                    id="topupCode"
+                    placeholder="Masukkan kode voucher..."
+                    class="w-full bg-dark-900/90 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none transition font-mono tracking-wider"
+                />
+            </div>
+
+            <div id="modalAlert"
+                class="text-xs hidden font-medium p-3 rounded-xl border">
+            </div>
+
+            <button
+                onclick="redeemCode()"
+                class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 font-semibold text-sm text-white shadow-neon-cyan transition active:scale-95 flex items-center justify-center gap-2">
+
+                <i class="fa-solid fa-circle-check"></i>
+                Klaim Kuota Sekarang
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const SECRET_CODE = "Rudiblack";
+    const DEFAULT_LIMIT = 2;
+
+    let currentLimit = localStorage.getItem('asep_ai_limit');
+
+    if (currentLimit === null) {
+        currentLimit = DEFAULT_LIMIT;
+        localStorage.setItem('asep_ai_limit', currentLimit);
+    } else {
+        currentLimit = parseInt(currentLimit, 10);
+    }
+
+    updateLimitDisplay();
+
+    function updateLimitDisplay() {
+        const el = document.getElementById('limitCount');
+        const badge = document.getElementById('welcomeLimitBadge');
+        const warnEl = document.getElementById('warningQuota');
+
+        el.textContent = currentLimit;
+
+        if (badge) {
+            badge.textContent = `${currentLimit} kueri`;
+        }
+
+        if (currentLimit <= 0) {
+            el.classList.remove('text-cyan-400');
+            el.classList.add('text-rose-400');
+            warnEl.classList.remove('hidden');
         } else {
-            currentLimit = parseInt(currentLimit, 10);
+            el.classList.add('text-cyan-400');
+            el.classList.remove('text-rose-400');
+            warnEl.classList.add('hidden');
+        }
+    }
+
+    function autoResize(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.min(textarea.scrollHeight, 140) + 'px';
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            document.getElementById('chatForm').requestSubmit();
+        }
+    }
+
+    function quickPrompt(text) {
+        const input = document.getElementById('userInput');
+
+        input.value = text;
+        autoResize(input);
+
+        handleChatSubmit(new Event('submit'));
+    }
+
+    function extractAiText(data) {
+        if (data === null || data === undefined) {
+            return "Tidak ada tanggapan dari server.";
         }
 
-        updateLimitDisplay();
-
-        function updateLimitDisplay() {
-            const el = document.getElementById('limitCount');
-            const badge = document.getElementById('welcomeLimitBadge');
-            const warnEl = document.getElementById('warningQuota');
-            
-            el.textContent = currentLimit;
-            if (badge) badge.textContent = `${currentLimit} kueri`;
-
-            if (currentLimit <= 0) {
-                el.classList.remove('text-cyan-400');
-                el.classList.add('text-rose-400');
-                warnEl.classList.remove('hidden');
-            } else {
-                el.classList.add('text-cyan-400');
-                el.classList.remove('text-rose-400');
-                warnEl.classList.add('hidden');
-            }
+        if (typeof data === 'string') {
+            return data.trim();
         }
 
-        function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 140) + 'px';
-        }
-
-        function handleKeyDown(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                document.getElementById('chatForm').requestSubmit();
-            }
-        }
-
-        function quickPrompt(text) {
-            const input = document.getElementById('userInput');
-            input.value = text;
-            autoResize(input);
-            handleChatSubmit(new Event('submit'));
-        }
-
-        // ==========================================================
-        // Safe Text Extractor (Anti Object / Anti [object Object])
-        // ==========================================================
-        function extractAiText(data) {
-            if (data === null || data === undefined) return "Tidak ada tanggapan dari server.";
-            if (typeof data === 'string') return data.trim();
-            if (typeof data === 'number' || typeof data === 'boolean') return String(data);
-
-            if (Array.isArray(data)) {
-                if (data.length === 0) return "Hasil kosong.";
-                return extractAiText(data[0]);
-            }
-
-            if (typeof data === 'object') {
-                const priorityKeys = [
-                    'reply', 'text', 'answer', 'response', 'pesan',
-                    'message', 'result', 'content', 'output', 'data'
-                ];
-
-                for (const key of priorityKeys) {
-                    if (data[key] !== undefined && data[key] !== null) {
-                        const extracted = extractAiText(data[key]);
-                        if (extracted && extracted !== '[object Object]') {
-                            return extracted;
-                        }
-                    }
-                }
-
-                if (data.choices && Array.isArray(data.choices) && data.choices.length > 0) {
-                    return extractAiText(data.choices[0].message?.content || data.choices[0].text);
-                }
-
-                try {
-                    return JSON.stringify(data, null, 2);
-                } catch (e) {
-                    return "Gagal memproses struktur respon.";
-                }
-            }
-
+        if (typeof data === 'number' || typeof data === 'boolean') {
             return String(data);
         }
 
-        // Handle Chat Submit
-        async function handleChatSubmit(e) {
-            e.preventDefault();
-            const inputEl = document.getElementById('userInput');
-            const query = inputEl.value.trim();
-            if (!query) return;
-
-            // Verifikasi Kuota
-            if (currentLimit <= 0) {
-                openModal();
-                showModalAlert("⚠️ Kuota habis. Masukkan voucher untuk melanjutkan!", "error");
-                return;
+        if (Array.isArray(data)) {
+            if (data.length === 0) {
+                return "Hasil kosong.";
             }
 
-            // Potong limit
-            currentLimit -= 1;
-            localStorage.setItem('asep_ai_limit', currentLimit);
-            updateLimitDisplay();
+            return extractAiText(data[0]);
+        }
 
-            // Hapus welcome dashboard jika ada
-            const welcome = document.getElementById('welcomeScreen');
-            if (welcome) welcome.remove();
+        if (typeof data === 'object') {
 
-            // Render Pesan Pengguna
-            appendMessage(query, 'user');
-            inputEl.value = '';
-            inputEl.style.height = 'auto';
+            const priorityKeys = [
+                'reply',
+                'text',
+                'answer',
+                'response',
+                'pesan',
+                'message',
+                'result',
+                'content',
+                'output',
+                'data'
+            ];
 
-            // Loading state
-            const sendBtn = document.getElementById('sendBtn');
-            sendBtn.disabled = true;
-            const loadingId = appendLoading();
+            for (const key of priorityKeys) {
+                if (data[key] !== undefined && data[key] !== null) {
+
+                    const extracted = extractAiText(data[key]);
+
+                    if (
+                        extracted &&
+                        extracted !== '[object Object]'
+                    ) {
+                        return extracted;
+                    }
+                }
+            }
+
+            if (
+                data.choices &&
+                Array.isArray(data.choices) &&
+                data.choices.length > 0
+            ) {
+                return extractAiText(
+                    data.choices[0].message?.content ||
+                    data.choices[0].text
+                );
+            }
 
             try {
-                // Endpoint Baru GPT-5.3
-                const url = `https://api.synoxcloud.xyz/ai-chat/gpt-5.3?pesan=${encodeURIComponent(query)}&apikey=FREE`;
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`Server merespon dengan status ${response.status}`);
-                }
-                
-                const data = await response.json();
-                const rawReply = extractAiText(data);
-
-                removeMessage(loadingId);
-                appendMessage(rawReply, 'bot');
-            } catch (err) {
-                removeMessage(loadingId);
-                appendMessage(`⚠️ Terjadi gangguan koneksi: ${err.message}. Silakan coba beberapa saat lagi.`, 'bot');
-            } finally {
-                sendBtn.disabled = false;
+                return JSON.stringify(data, null, 2);
+            } catch (e) {
+                return "Gagal memproses struktur respon.";
             }
         }
 
-        function appendMessage(text, sender) {
-            const chatBox = document.getElementById('chatBox');
-            const msgId = 'msg-' + Date.now();
-            const div = document.createElement('div');
-            div.id = msgId;
-            div.className = `flex gap-3.5 leading-relaxed ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+        return String(data);
+    }
 
-            if (sender === 'user') {
-                div.innerHTML = `
-                    <div class="max-w-[85%] md:max-w-[75%] bg-gradient-to-tr from-cyan-600 to-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-3 shadow-lg shadow-cyan-950/30 text-sm whitespace-pre-wrap border border-cyan-400/20">
-                        ${escapeHtml(text)}
-                    </div>
-                    <div class="w-8 h-8 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-xs flex-shrink-0 text-slate-300">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                `;
-            } else {
-                const parsedHtml = marked.parse(text);
+    async function handleChatSubmit(e) {
+        e.preventDefault();
 
-                div.innerHTML = `
-                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0 shadow-neon-cyan mt-1">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <div class="max-w-[85%] md:max-w-[80%] group">
-                        <div class="glass-card rounded-2xl rounded-tl-none px-4 py-3.5 border border-white/10 text-slate-200 text-sm markdown-body shadow-sm">
-                            ${parsedHtml}
-                        </div>
-                        <div class="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition duration-200">
-                            <button onclick="copyToClipboard('${msgId}', this)" class="text-[11px] text-slate-400 hover:text-cyan-300 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 transition flex items-center gap-1.5">
-                                <i class="fa-regular fa-copy"></i> Salin Jawaban
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
+        const inputEl = document.getElementById('userInput');
+        const query = inputEl.value.trim();
 
-            chatBox.appendChild(div);
-            chatBox.scrollTop = chatBox.scrollHeight;
+        if (!query) return;
+
+        if (currentLimit <= 0) {
+            openModal();
+            showModalAlert(
+                "⚠️ Kuota habis. Masukkan voucher untuk melanjutkan!",
+                "error"
+            );
+            return;
         }
 
-        function appendLoading() {
-            const chatBox = document.getElementById('chatBox');
-            const loadingId = 'loading-' + Date.now();
-            const div = document.createElement('div');
-            div.id = loadingId;
-            div.className = "flex gap-3.5 justify-start";
+        currentLimit -= 1;
+
+        localStorage.setItem(
+            'asep_ai_limit',
+            currentLimit
+        );
+
+        updateLimitDisplay();
+
+        const welcome = document.getElementById('welcomeScreen');
+
+        if (welcome) {
+            welcome.remove();
+        }
+
+        appendMessage(query, 'user');
+
+        inputEl.value = '';
+        inputEl.style.height = 'auto';
+
+        const sendBtn = document.getElementById('sendBtn');
+
+        sendBtn.disabled = true;
+
+        const loadingId = appendLoading();
+
+        try {
+
+            const url =
+                `https://api.synoxcloud.xyz/ai-chat/gpt-5.3?pesan=${encodeURIComponent(query)}&apikey=FREE`;
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(
+                    `Server merespon dengan status ${response.status}`
+                );
+            }
+
+            const data = await response.json();
+
+            const rawReply = extractAiText(data);
+
+            removeMessage(loadingId);
+
+            appendMessage(rawReply, 'bot');
+
+        } catch (err) {
+
+            removeMessage(loadingId);
+
+            appendMessage(
+                `⚠️ Terjadi gangguan koneksi: ${err.message}. Silakan coba beberapa saat lagi.`,
+                'bot'
+            );
+
+        } finally {
+            sendBtn.disabled = false;
+        }
+    }
+
+    function appendMessage(text, sender) {
+
+        const chatBox = document.getElementById('chatBox');
+
+        const msgId = 'msg-' + Date.now();
+
+        const div = document.createElement('div');
+
+        div.id = msgId;
+
+        div.className =
+            `flex gap-3.5 leading-relaxed ${
+                sender === 'user'
+                    ? 'justify-end'
+                    : 'justify-start'
+            }`;
+
+        if (sender === 'user') {
+
             div.innerHTML = `
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0 shadow-neon-cyan">
-                    <i class="fa-solid fa-atom"></i>
+                <div class="max-w-[85%] md:max-w-[75%] bg-gradient-to-tr from-cyan-600 to-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-3 shadow-lg shadow-cyan-950/30 text-sm whitespace-pre-wrap border border-cyan-400/20">
+                    ${escapeHtml(text)}
                 </div>
-                <div class="glass-panel rounded-2xl rounded-tl-none px-5 py-3.5 border border-white/10 flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-cyan-400 dot-pulse"></span>
-                    <span class="w-2 h-2 rounded-full bg-cyan-400 dot-pulse"></span>
-                    <span class="w-2 h-2 rounded-full bg-cyan-400 dot-pulse"></span>
+
+                <div class="w-8 h-8 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-xs flex-shrink-0 text-slate-300">
+                    <i class="fa-solid fa-user"></i>
                 </div>
             `;
-            chatBox.appendChild(div);
-            chatBox.scrollTop = chatBox.scrollHeight;
-            return loadingId;
+
+        } else {
+
+            const parsedHtml = marked.parse(text);
+
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0 shadow-neon-cyan mt-1">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+
+                <div class="max-w-[85%] md:max-w-[80%] group">
+
+                    <div class="glass-card rounded-2xl rounded-tl-none px-4 py-3.5 border border-white/10 text-slate-200 text-sm markdown-body shadow-sm">
+                        ${parsedHtml}
+                    </div>
+
+                    <div class="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition duration-200">
+
+                        <button
+                            onclick="copyToClipboard('${msgId}', this)"
+                            class="text-[11px] text-slate-400 hover:text-cyan-300 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 transition flex items-center gap-1.5">
+
+                            <i class="fa-regular fa-copy"></i>
+                            Salin Jawaban
+
+                        </button>
+
+                    </div>
+                </div>
+            `;
         }
 
-        function removeMessage(id) {
-            const el = document.getElementById(id);
-            if (el) el.remove();
+        chatBox.appendChild(div);
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+    }
+
+    function appendLoading() {
+
+        const chatBox =
+            document.getElementById('chatBox');
+
+        const loadingId =
+            'loading-' + Date.now();
+
+        const div =
+            document.createElement('div');
+
+        div.id = loadingId;
+
+        div.className =
+            "flex gap-3.5 justify-start";
+
+        div.innerHTML = `
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0 shadow-neon-cyan">
+                <i class="fa-solid fa-atom"></i>
+            </div>
+
+            <div class="glass-panel rounded-2xl rounded-tl-none px-5 py-3.5 border border-white/10 flex items-center space-x-2">
+
+                <span class="w-2 h-2 rounded-full bg-cyan-400 dot-pulse"></span>
+                <span class="w-2 h-2 rounded-full bg-cyan-400 dot-pulse"></span>
+                <span class="w-2 h-2 rounded-full bg-cyan-400 dot-pulse"></span>
+
+            </div>
+        `;
+
+        chatBox.appendChild(div);
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+
+        return loadingId;
+    }
+
+    function removeMessage(id) {
+
+        const el =
+            document.getElementById(id);
+
+        if (el) {
+            el.remove();
         }
+    }
 
-        function copyToClipboard(elementId, btn) {
-            const container = document.getElementById(elementId);
-            const markdownEl = container.querySelector('.markdown-body');
-            const textToCopy = markdownEl ? markdownEl.innerText : '';
+    function copyToClipboard(elementId, btn) {
 
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalHtml = btn.innerHTML;
-                btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Tersalin!`;
+        const container =
+            document.getElementById(elementId);
+
+        const markdownEl =
+            container.querySelector('.markdown-body');
+
+        const textToCopy =
+            markdownEl
+                ? markdownEl.innerText
+                : '';
+
+        navigator.clipboard
+            .writeText(textToCopy)
+            .then(() => {
+
+                const originalHtml =
+                    btn.innerHTML;
+
+                btn.innerHTML =
+                    `<i class="fa-solid fa-check text-emerald-400"></i> Tersalin!`;
+
                 setTimeout(() => {
-                    btn.innerHTML = originalHtml;
+                    btn.innerHTML =
+                        originalHtml;
                 }, 2000);
             });
-        }
+    }
 
-        // Modal Handlers
-        function openModal() {
-            const modal = document.getElementById('topupModal');
-            const box = document.getElementById('modalBox');
-            modal.classList.remove('hidden');
+    function openModal() {
+
+        const modal =
+            document.getElementById('topupModal');
+
+        const box =
+            document.getElementById('modalBox');
+
+        modal.classList.remove('hidden');
+
+        setTimeout(() => {
+
+            modal.classList.remove('opacity-0');
+
+            box.classList.remove('scale-95');
+
+            box.classList.add('scale-100');
+
+        }, 10);
+
+        document.getElementById('topupCode').value = '';
+
+        document.getElementById('modalAlert')
+            .classList.add('hidden');
+    }
+
+    function closeModal() {
+
+        const modal =
+            document.getElementById('topupModal');
+
+        const box =
+            document.getElementById('modalBox');
+
+        modal.classList.add('opacity-0');
+
+        box.classList.remove('scale-100');
+
+        box.classList.add('scale-95');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    function redeemCode() {
+
+        const input =
+            document.getElementById('topupCode')
+                .value
+                .trim();
+
+        if (
+            input.toLowerCase() ===
+            SECRET_CODE.toLowerCase()
+        ) {
+
+            currentLimit += 10;
+
+            localStorage.setItem(
+                'asep_ai_limit',
+                currentLimit
+            );
+
+            updateLimitDisplay();
+
+            showModalAlert(
+                "🎉 Berhasil! +10 limit pertanyaan berhasil diklaim.",
+                "success"
+            );
+
             setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                box.classList.remove('scale-95');
-                box.classList.add('scale-100');
-            }, 10);
-            document.getElementById('topupCode').value = '';
-            document.getElementById('modalAlert').classList.add('hidden');
-        }
+                closeModal();
+            }, 1400);
 
-        function closeModal() {
-            const modal = document.getElementById('topupModal');
-            const box = document.getElementById('modalBox');
-            modal.classList.add('opacity-0');
-            box.classList.remove('scale-100');
-            box.classList.add('scale-95');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
+        } else {
 
-        function redeemCode() {
-            const input = document.getElementById('topupCode').value.trim();
-            
-            if (input.toLowerCase() === SECRET_CODE.toLowerCase()) {
-                currentLimit += 10;
-                localStorage.setItem('asep_ai_limit', currentLimit);
-                updateLimitDisplay();
-                showModalAlert("🎉 Berhasil! +10 limit pertanyaan berhasil diklaim.", "success");
-                setTimeout(() => closeModal(), 1400);
-            } else {
-                showModalAlert("❌ Kode voucher tidak terdaftar!", "error");
-            }
+            showModalAlert(
+                "❌ Kode voucher tidak terdaftar!",
+                "error"
+            );
         }
+    }
 
-        function showModalAlert(msg, type) {
-            const alertEl = document.getElementById('modalAlert');
-            alertEl.textContent = msg;
-            alertEl.classList.remove('hidden', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20', 'bg-rose-500/10', 'text-rose-400', 'border-rose-500/20');
-            
-            if (type === 'success') {
-                alertEl.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20');
-            } else {
-                alertEl.classList.add('bg-rose-500/10', 'text-rose-400', 'border-rose-500/20');
-            }
-        }
+    function showModalAlert(msg, type) {
 
-        function escapeHtml(string) {
-            return String(string)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+        const alertEl =
+            document.getElementById('modalAlert');
+
+        alertEl.textContent = msg;
+
+        alertEl.classList.remove(
+            'hidden',
+            'bg-emerald-500/10',
+            'text-emerald-400',
+            'border-emerald-500/20',
+            'bg-rose-500/10',
+            'text-rose-400',
+            'border-rose-500/20'
+        );
+
+        if (type === 'success') {
+
+            alertEl.classList.add(
+                'bg-emerald-500/10',
+                'text-emerald-400',
+                'border-emerald-500/20'
+            );
+
+        } else {
+
+            alertEl.classList.add(
+                'bg-rose-500/10',
+                'text-rose-400',
+                'border-rose-500/20'
+            );
         }
-    </script>
+    }
+
+    function escapeHtml(string) {
+
+        return String(string)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+</script>
+
 </body>
 </html>
