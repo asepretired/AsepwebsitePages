@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AsepAi - Asisten Cerdas</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Marked.js untuk render Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eefbf6',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    pre {
+      background: #020617;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+    code {
+      font-family: monospace;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden font-sans">
+
+  <!-- TOP NAVIGATION / HEADER -->
+  <header class="border-b border-slate-800 bg-slate-900/70 backdrop-blur-md px-4 py-3 flex items-center justify-between z-10">
+    <div class="flex items-center space-x-3">
+      <!-- LOGO ASEPAI (SVG) -->
+      <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-0.5 shadow-lg shadow-emerald-500/20">
+        <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
+          <svg class="w-6 h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L3 21h4l2.5-5h5l2.5 5h4L12 2z"/>
+            <circle cx="12" cy="11" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+      <div>
+        <h1 class="font-bold text-lg leading-tight tracking-wide bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
+          AsepAi
+        </h1>
+        <p class="text-[11px] text-slate-400">Gemini 3.1 Flash Lite Engine</p>
+      </div>
+    </div>
+
+    <!-- CREDIT & TOPUP BAR -->
+    <div class="flex items-center space-x-2.5">
+      <div id="creditBadge" class="text-xs px-3 py-1.5 rounded-full font-medium border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 flex items-center gap-1.5">
+        <span id="creditIcon">⚡</span>
+        <span id="creditText">Memuat kredit...</span>
+      </div>
+
+      <button onclick="openTopupModal()" class="text-xs px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-medium rounded-lg shadow-md hover:shadow-emerald-500/25 transition duration-200 active:scale-95 flex items-center gap-1">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Topup
+      </button>
+    </div>
+  </header>
+
+  <!-- CHAT CONTAINER -->
+  <main id="chatBox" class="flex-1 overflow-y-auto p-4 md:px-20 lg:px-64 space-y-4">
+    <!-- Pesan Sambutan -->
+    <div class="flex gap-3">
+      <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-400 font-bold text-sm">
+        A
+      </div>
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-slate-200 text-sm shadow-sm leading-relaxed">
+        <p class="font-semibold text-emerald-400 mb-1">Halo! Saya AsepAi 🤖</p>
+        Ada yang bisa saya bantu hari ini? Anda memiliki kuota gratis untuk mencoba. Jika kuota habis, klik tombol <strong>Topup</strong> dan masukkan kode voucher khusus.
+      </div>
+    </div>
+  </main>
+
+  <!-- INPUT AREA -->
+  <footer class="p-3 md:px-20 lg:px-64 border-t border-slate-800/80 bg-slate-900/60 backdrop-blur-md">
+    <form id="chatForm" onsubmit="handleSendMessage(event)" class="relative flex items-center">
+      <textarea
+        id="userInput"
+        rows="1"
+        placeholder="Tanya apa saja ke AsepAi..."
+        class="w-full bg-slate-800/80 border border-slate-700 rounded-xl pl-4 pr-12 py-3 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 resize-none transition"
+        onkeydown="if(event.key === 'Enter' && !event.shiftKey){ event.preventDefault(); handleSendMessage(event); }"
+      ></textarea>
+      
+      <button 
+        type="submit" 
+        id="sendBtn"
+        class="absolute right-2 p-2 text-emerald-400 hover:text-emerald-300 disabled:text-slate-600 disabled:cursor-not-allowed transition"
+      >
+        <svg class="w-5 h-5 transform rotate-90" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+        </svg>
+      </button>
+    </form>
+    <p class="text-[10px] text-center text-slate-500 mt-2">AsepAi menggunakan Gemini API. Jawaban dapat bervariasi.</p>
+  </footer>
+
+  <!-- MODAL TOPUP -->
+  <div id="topupModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+      <h3 class="text-base font-bold text-slate-100 mb-1">Topup Kuota AsepAi</h3>
+      <p class="text-xs text-slate-400 mb-4">Masukkan kode voucher untuk mengaktifkan akses <b>Unlimited Prompt</b> selamanya.</p>
+      
+      <input 
+        type="text" 
+        id="voucherCode" 
+        placeholder="Masukkan kode voucher..." 
+        class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 mb-3 focus:outline-none focus:border-emerald-500"
+      />
+
+      <div id="topupAlert" class="hidden text-xs py-1.5 px-2.5 rounded mb-3"></div>
+
+      <div class="flex gap-2 justify-end">
+        <button onclick="closeTopupModal()" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200">
+          Batal
+        </button>
+        <button onclick="redeemVoucher()" type="button" class="px-4 py-1.5 rounded-lg text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition">
+          Aktivasi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Konfigurasi API
+    const GEMINI_API_KEY = "AQ.Ab8RN6KxYnFjn6rFjE_TX8eqOLmPu62Q5rlDtl7k0golUi91_w";
+    const GEMINI_MODEL = "gemini-3.1-flash-lite";
+    const UNLIMITED_VOUCHER = "17201305";
+
+    // Inisialisasi State Kredit dari localStorage
+    let isUnlimited = localStorage.getItem("asepai_unlimited") === "true";
+    let credits = localStorage.getItem("asepai_credits") !== null 
+                  ? parseInt(localStorage.getItem("asepai_credits"), 10) 
+                  : 2;
+
+    function saveState() {
+      localStorage.setItem("asepai_unlimited", isUnlimited);
+      localStorage.setItem("asepai_credits", credits);
+      renderCreditBadge();
+    }
+
+    function renderCreditBadge() {
+      const badge = document.getElementById("creditBadge");
+      const text = document.getElementById("creditText");
+      const icon = document.getElementById("creditIcon");
+
+      if (isUnlimited) {
+        badge.className = "text-xs px-3 py-1.5 rounded-full font-semibold border border-amber-500/30 bg-amber-500/10 text-amber-400 flex items-center gap-1.5 shadow-sm";
+        icon.textContent = "👑";
+        text.textContent = "Unlimited Plan";
+      } else {
+        badge.className = `text-xs px-3 py-1.5 rounded-full font-medium border ${credits > 0 ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-rose-500/30 bg-rose-500/10 text-rose-400'} flex items-center gap-1.5`;
+        icon.textContent = credits > 0 ? "⚡" : "⚠️";
+        text.textContent = `Kredit: ${credits}/2`;
+      }
+    }
+
+    renderCreditBadge();
+
+    // Modal Control
+    function openTopupModal() {
+      document.getElementById("topupModal").classList.remove("hidden");
+      document.getElementById("topupModal").classList.add("flex");
+      document.getElementById("voucherCode").focus();
+    }
+
+    function closeTopupModal() {
+      document.getElementById("topupModal").classList.add("hidden");
+      document.getElementById("topupModal").classList.remove("flex");
+      document.getElementById("topupAlert").classList.add("hidden");
+      document.getElementById("voucherCode").value = "";
+    }
+
+    function redeemVoucher() {
+      const input = document.getElementById("voucherCode").value.trim();
+      const alertBox = document.getElementById("topupAlert");
+
+      if (input === UNLIMITED_VOUCHER) {
+        isUnlimited = true;
+        saveState();
+        alertBox.className = "text-xs py-1.5 px-2.5 rounded mb-3 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
+        alertBox.textContent = "Berhasil! Akun Anda kini Unlimited!";
+        setTimeout(() => {
+          closeTopupModal();
+        }, 1200);
+      } else {
+        alertBox.className = "text-xs py-1.5 px-2.5 rounded mb-3 bg-rose-500/20 text-rose-400 border border-rose-500/30 block";
+        alertBox.textContent = "Kode voucher tidak valid!";
+      }
+    }
+
+    // Chat Logic
+    async function handleSendMessage(e) {
+      if (e) e.preventDefault();
+      const inputEl = document.getElementById("userInput");
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      // Cek kuota
+      if (!isUnlimited && credits <= 0) {
+        openTopupModal();
+        const alertBox = document.getElementById("topupAlert");
+        alertBox.className = "text-xs py-1.5 px-2.5 rounded mb-3 bg-rose-500/20 text-rose-400 border border-rose-500/30 block";
+        alertBox.textContent = "Kredit gratis Anda telah habis! Masukkan voucher.";
+        return;
+      }
+
+      // Potong kredit jika bukan unlimited
+      if (!isUnlimited) {
+        credits--;
+        saveState();
+      }
+
+      // Tampilkan pesan user
+      appendMessage("user", text);
+      inputEl.value = "";
+
+      // Tampilkan placeholder bot
+      const botMsgId = appendLoadingMessage();
+
+      try {
+        const responseText = await callGeminiAPI(text);
+        updateBotMessage(botMsgId, responseText);
+      } catch (err) {
+        updateBotMessage(botMsgId, `Maaf, terjadi kendala saat menghubungi API: ${err.message}`);
+      }
+    }
+
+    function appendMessage(role, text) {
+      const chatBox = document.getElementById("chatBox");
+      const wrapper = document.createElement("div");
+
+      if (role === "user") {
+        wrapper.className = "flex justify-end gap-3";
+        wrapper.innerHTML = `
+          <div class="bg-emerald-600 text-white rounded-2xl rounded-tr-none p-3 max-w-[85%] text-sm shadow-sm leading-relaxed">
+            ${escapeHtml(text)}
+          </div>
+        `;
+      }
+      chatBox.appendChild(wrapper);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function appendLoadingMessage() {
+      const chatBox = document.getElementById("chatBox");
+      const id = "msg-" + Date.now();
+      const wrapper = document.createElement("div");
+      wrapper.id = id;
+      wrapper.className = "flex gap-3";
+      wrapper.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-400 font-bold text-sm">
+          A
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-3 max-w-[85%] text-slate-300 text-sm shadow-sm flex items-center gap-2">
+          <span class="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
+          <span class="text-slate-400">AsepAi sedang berpikir...</span>
+        </div>
+      `;
+      chatBox.appendChild(wrapper);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      return id;
+    }
+
+    function updateBotMessage(msgId, markdownText) {
+      const el = document.getElementById(msgId);
+      if (!el) return;
+
+      const htmlContent = marked.parse(markdownText);
+      el.innerHTML = `
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-400 font-bold text-sm">
+          A
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-slate-200 text-sm shadow-sm leading-relaxed prose prose-invert max-w-none">
+          ${htmlContent}
+        </div>
+      `;
+      const chatBox = document.getElementById("chatBox");
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function callGeminiAPI(prompt) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+      
+      const payload = {
+        contents: [
+          {
+            parts: [{ text: prompt }]
+          }
+        ]
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error?.message || `HTTP Status ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || "Tidak ada jawaban dari AI.";
+    }
+
+    function escapeHtml(string) {
+      const div = document.createElement('div');
+      div.innerText = string;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
