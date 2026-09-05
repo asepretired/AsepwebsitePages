@@ -1,352 +1,1300 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#020617">
   <title>AsepAi - Asisten Cerdas</title>
-  <!-- Tailwind CSS CDN -->
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Marked.js untuk render Markdown -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             brand: {
-              50: '#eefbf6',
-              500: '#10b981',
-              600: '#059669',
-              700: '#047857',
+              50: "#eefbf6",
+              500: "#10b981",
+              600: "#059669",
+              700: "#047857"
             }
           }
         }
       }
-    }
+    };
   </script>
+
   <style>
-    /* Custom scrollbar */
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      overscroll-behavior: none;
+    }
+
     ::-webkit-scrollbar {
       width: 6px;
+      height: 6px;
     }
+
     ::-webkit-scrollbar-track {
-      background: #0f172a;
+      background: #020617;
     }
+
     ::-webkit-scrollbar-thumb {
       background: #334155;
-      border-radius: 4px;
+      border-radius: 999px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
+
+    textarea {
+      scrollbar-width: thin;
+    }
+
     pre {
       background: #020617;
+      border: 1px solid #1e293b;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 10px;
       overflow-x: auto;
-      margin-top: 8px;
-      margin-bottom: 8px;
+      margin: 10px 0;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
+
     code {
-      font-family: monospace;
-      font-size: 0.9em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco,
+        Consolas, "Liberation Mono", monospace;
+      font-size: .9em;
+    }
+
+    .prose p {
+      margin: .45rem 0;
+    }
+
+    .prose p:first-child {
+      margin-top: 0;
+    }
+
+    .prose p:last-child {
+      margin-bottom: 0;
+    }
+
+    .prose ul,
+    .prose ol {
+      margin: .5rem 0;
+      padding-left: 1.4rem;
+    }
+
+    .prose li {
+      margin: .2rem 0;
+    }
+
+    .prose a {
+      color: #34d399;
+      text-decoration: underline;
+    }
+
+    .message-enter {
+      animation: messageIn .22s ease-out;
+    }
+
+    @keyframes messageIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .typing-dot {
+      animation: typing 1.2s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: .15s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: .3s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        opacity: .25;
+        transform: translateY(0);
+      }
+
+      30% {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
     }
   </style>
 </head>
+
 <body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden font-sans">
 
-  <!-- TOP NAVIGATION / HEADER -->
-  <header class="border-b border-slate-800 bg-slate-900/70 backdrop-blur-md px-4 py-3 flex items-center justify-between z-10">
-    <div class="flex items-center space-x-3">
-      <!-- LOGO ASEPAI (SVG) -->
-      <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-0.5 shadow-lg shadow-emerald-500/20">
+  <!-- HEADER -->
+  <header class="shrink-0 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl px-4 py-3 flex items-center justify-between z-20">
+
+    <div class="flex items-center gap-3 min-w-0">
+
+      <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-[2px] shadow-lg shadow-emerald-500/20 shrink-0">
         <div class="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
-          <svg class="w-6 h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+
+          <svg
+            class="w-6 h-6 text-emerald-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
             <path d="M12 2L3 21h4l2.5-5h5l2.5 5h4L12 2z"/>
             <circle cx="12" cy="11" r="1.5" fill="currentColor"/>
           </svg>
+
         </div>
       </div>
-      <div>
+
+      <div class="min-w-0">
         <h1 class="font-bold text-lg leading-tight tracking-wide bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
           AsepAi
         </h1>
-        <p class="text-[11px] text-slate-400">Gemini 3.1 Flash Lite Engine</p>
+
+        <p class="text-[11px] text-slate-400 truncate">
+          Gemini 3.1 Flash Lite Engine
+        </p>
       </div>
+
     </div>
 
-    <!-- CREDIT & TOPUP BAR -->
-    <div class="flex items-center space-x-2.5">
-      <div id="creditBadge" class="text-xs px-3 py-1.5 rounded-full font-medium border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 flex items-center gap-1.5">
+    <div class="flex items-center gap-2 shrink-0">
+
+      <div
+        id="creditBadge"
+        class="text-xs px-3 py-1.5 rounded-full font-medium border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 flex items-center gap-1.5"
+      >
         <span id="creditIcon">⚡</span>
-        <span id="creditText">Memuat kredit...</span>
+        <span id="creditText">Memuat...</span>
       </div>
 
-      <button onclick="openTopupModal()" class="text-xs px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-medium rounded-lg shadow-md hover:shadow-emerald-500/25 transition duration-200 active:scale-95 flex items-center gap-1">
+      <button
+        onclick="openTopupModal()"
+        class="text-xs px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-medium rounded-lg shadow-md transition active:scale-95 flex items-center gap-1"
+      >
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
         </svg>
-        Topup
+
+        <span>Topup</span>
       </button>
+
     </div>
   </header>
 
-  <!-- CHAT CONTAINER -->
-  <main id="chatBox" class="flex-1 overflow-y-auto p-4 md:px-20 lg:px-64 space-y-4">
-    <!-- Pesan Sambutan -->
-    <div class="flex gap-3">
+
+  <!-- CHAT -->
+  <main
+    id="chatBox"
+    class="flex-1 overflow-y-auto p-4 md:px-20 lg:px-64 space-y-4"
+  >
+
+    <!-- WELCOME -->
+    <div class="flex gap-3 message-enter">
+
       <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-400 font-bold text-sm">
         A
       </div>
+
       <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-slate-200 text-sm shadow-sm leading-relaxed">
-        <p class="font-semibold text-emerald-400 mb-1">Halo! Saya AsepAi 🤖</p>
-        Ada yang bisa saya bantu hari ini? Anda memiliki kuota gratis untuk mencoba. Jika kuota habis, klik tombol <strong>Topup</strong> dan masukkan kode voucher khusus.
+
+        <p class="font-semibold text-emerald-400 mb-1">
+          Halo! Saya AsepAi 🤖
+        </p>
+
+        <p>
+          Ada yang bisa saya bantu hari ini?
+          Anda memiliki kuota gratis untuk mencoba.
+          Jika kuota habis, klik tombol <strong>Topup</strong>
+          dan masukkan kode voucher khusus.
+        </p>
+
       </div>
     </div>
+
   </main>
 
-  <!-- INPUT AREA -->
-  <footer class="p-3 md:px-20 lg:px-64 border-t border-slate-800/80 bg-slate-900/60 backdrop-blur-md">
-    <form id="chatForm" onsubmit="handleSendMessage(event)" class="relative flex items-center">
+
+  <!-- INPUT -->
+  <footer class="shrink-0 p-3 md:px-20 lg:px-64 border-t border-slate-800/80 bg-slate-900/80 backdrop-blur-xl">
+
+    <form
+      id="chatForm"
+      class="relative flex items-center"
+    >
+
       <textarea
         id="userInput"
         rows="1"
+        maxlength="10000"
         placeholder="Tanya apa saja ke AsepAi..."
         class="w-full bg-slate-800/80 border border-slate-700 rounded-xl pl-4 pr-12 py-3 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 resize-none transition"
-        onkeydown="if(event.key === 'Enter' && !event.shiftKey){ event.preventDefault(); handleSendMessage(event); }"
       ></textarea>
-      
-      <button 
-        type="submit" 
+
+      <button
+        type="submit"
         id="sendBtn"
         class="absolute right-2 p-2 text-emerald-400 hover:text-emerald-300 disabled:text-slate-600 disabled:cursor-not-allowed transition"
+        aria-label="Kirim"
       >
-        <svg class="w-5 h-5 transform rotate-90" fill="currentColor" viewBox="0 0 20 20">
+
+        <svg
+          class="w-5 h-5 transform rotate-90"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
           <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
         </svg>
+
       </button>
+
     </form>
-    <p class="text-[10px] text-center text-slate-500 mt-2">AsepAi menggunakan Gemini API. Jawaban dapat bervariasi.</p>
+
+    <p class="text-[10px] text-center text-slate-500 mt-2">
+      AsepAi menggunakan Gemini API. Jawaban dapat bervariasi.
+    </p>
+
   </footer>
 
-  <!-- MODAL TOPUP -->
-  <div id="topupModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
-      <h3 class="text-base font-bold text-slate-100 mb-1">Topup Kuota AsepAi</h3>
-      <p class="text-xs text-slate-400 mb-4">Masukkan kode voucher untuk mengaktifkan akses <b>Unlimited Prompt</b> selamanya.</p>
-      
-      <input 
-        type="text" 
-        id="voucherCode" 
-        placeholder="Masukkan kode voucher..." 
-        class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 mb-3 focus:outline-none focus:border-emerald-500"
-      />
 
-      <div id="topupAlert" class="hidden text-xs py-1.5 px-2.5 rounded mb-3"></div>
+  <!-- TOPUP MODAL -->
+  <div
+    id="topupModal"
+    class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4"
+  >
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+
+      <h3 class="text-base font-bold text-slate-100 mb-1">
+        Topup Kuota AsepAi
+      </h3>
+
+      <p class="text-xs text-slate-400 mb-4">
+        Masukkan kode voucher untuk mengaktifkan akses
+        <b>Unlimited Prompt</b>.
+      </p>
+
+      <input
+        type="text"
+        id="voucherCode"
+        autocomplete="off"
+        placeholder="Masukkan kode voucher..."
+        class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 mb-3 focus:outline-none focus:border-emerald-500"
+      >
+
+      <div
+        id="topupAlert"
+        class="hidden text-xs py-2 px-3 rounded-lg mb-3"
+      ></div>
 
       <div class="flex gap-2 justify-end">
-        <button onclick="closeTopupModal()" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200">
+
+        <button
+          onclick="closeTopupModal()"
+          type="button"
+          class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-200"
+        >
           Batal
         </button>
-        <button onclick="redeemVoucher()" type="button" class="px-4 py-1.5 rounded-lg text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition">
+
+        <button
+          onclick="redeemVoucher()"
+          type="button"
+          class="px-4 py-1.5 rounded-lg text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white transition"
+        >
           Aktivasi
         </button>
+
       </div>
+
     </div>
+
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    // Konfigurasi API
-    const GEMINI_API_KEY = "AQ.Ab8RN6KxYnFjn6rFjE_TX8eqOLmPu62Q5rlDtl7k0golUi91_w";
-    const GEMINI_MODEL = "gemini-3.1-flash-lite";
-    const UNLIMITED_VOUCHER = "17201305";
 
-    // Inisialisasi State Kredit dari localStorage
-    let isUnlimited = localStorage.getItem("asepai_unlimited") === "true";
-    let credits = localStorage.getItem("asepai_credits") !== null 
-                  ? parseInt(localStorage.getItem("asepai_credits"), 10) 
-                  : 2;
+  <script>
+
+    /* =========================================================
+       KONFIGURASI
+    ========================================================= */
+
+    /*
+      IMPORTANT:
+      Key yang kamu kirim sebelumnya dimasukkan di sini.
+
+      Native Gemini REST API:
+      x-goog-api-key: API_KEY
+
+      BUKAN:
+      Authorization: Bearer API_KEY
+    */
+
+    const GEMINI_API_KEY =
+      "AQ.Ab8RN6KxYnFjn6rFjE_TX8eqOLmPu62Q5rlDtl7k0golUi91_w";
+
+    const GEMINI_MODEL =
+      "gemini-3.1-flash-lite";
+
+    const GEMINI_ENDPOINT =
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+    const UNLIMITED_VOUCHER =
+      "17201305";
+
+    const FREE_CREDITS =
+      2;
+
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let isUnlimited =
+      localStorage.getItem("asepai_unlimited") === "true";
+
+    let storedCredits =
+      localStorage.getItem("asepai_credits");
+
+    let credits =
+      storedCredits !== null
+        ? parseInt(storedCredits, 10)
+        : FREE_CREDITS;
+
+    if (!Number.isFinite(credits) || credits < 0) {
+      credits = FREE_CREDITS;
+    }
+
+
+    let isGenerating = false;
+
+
+    /* =========================================================
+       LOCAL STORAGE
+    ========================================================= */
 
     function saveState() {
-      localStorage.setItem("asepai_unlimited", isUnlimited);
-      localStorage.setItem("asepai_credits", credits);
+
+      localStorage.setItem(
+        "asepai_unlimited",
+        String(isUnlimited)
+      );
+
+      localStorage.setItem(
+        "asepai_credits",
+        String(credits)
+      );
+
       renderCreditBadge();
     }
 
+
+    /* =========================================================
+       CREDIT BADGE
+    ========================================================= */
+
     function renderCreditBadge() {
-      const badge = document.getElementById("creditBadge");
-      const text = document.getElementById("creditText");
-      const icon = document.getElementById("creditIcon");
+
+      const badge =
+        document.getElementById("creditBadge");
+
+      const text =
+        document.getElementById("creditText");
+
+      const icon =
+        document.getElementById("creditIcon");
+
+      if (!badge || !text || !icon) return;
+
 
       if (isUnlimited) {
-        badge.className = "text-xs px-3 py-1.5 rounded-full font-semibold border border-amber-500/30 bg-amber-500/10 text-amber-400 flex items-center gap-1.5 shadow-sm";
+
+        badge.className =
+          "text-xs px-3 py-1.5 rounded-full font-semibold border border-amber-500/30 bg-amber-500/10 text-amber-400 flex items-center gap-1.5 shadow-sm";
+
         icon.textContent = "👑";
         text.textContent = "Unlimited Plan";
-      } else {
-        badge.className = `text-xs px-3 py-1.5 rounded-full font-medium border ${credits > 0 ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-rose-500/30 bg-rose-500/10 text-rose-400'} flex items-center gap-1.5`;
-        icon.textContent = credits > 0 ? "⚡" : "⚠️";
-        text.textContent = `Kredit: ${credits}/2`;
-      }
-    }
 
-    renderCreditBadge();
-
-    // Modal Control
-    function openTopupModal() {
-      document.getElementById("topupModal").classList.remove("hidden");
-      document.getElementById("topupModal").classList.add("flex");
-      document.getElementById("voucherCode").focus();
-    }
-
-    function closeTopupModal() {
-      document.getElementById("topupModal").classList.add("hidden");
-      document.getElementById("topupModal").classList.remove("flex");
-      document.getElementById("topupAlert").classList.add("hidden");
-      document.getElementById("voucherCode").value = "";
-    }
-
-    function redeemVoucher() {
-      const input = document.getElementById("voucherCode").value.trim();
-      const alertBox = document.getElementById("topupAlert");
-
-      if (input === UNLIMITED_VOUCHER) {
-        isUnlimited = true;
-        saveState();
-        alertBox.className = "text-xs py-1.5 px-2.5 rounded mb-3 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block";
-        alertBox.textContent = "Berhasil! Akun Anda kini Unlimited!";
-        setTimeout(() => {
-          closeTopupModal();
-        }, 1200);
-      } else {
-        alertBox.className = "text-xs py-1.5 px-2.5 rounded mb-3 bg-rose-500/20 text-rose-400 border border-rose-500/30 block";
-        alertBox.textContent = "Kode voucher tidak valid!";
-      }
-    }
-
-    // Chat Logic
-    async function handleSendMessage(e) {
-      if (e) e.preventDefault();
-      const inputEl = document.getElementById("userInput");
-      const text = inputEl.value.trim();
-      if (!text) return;
-
-      // Cek kuota
-      if (!isUnlimited && credits <= 0) {
-        openTopupModal();
-        const alertBox = document.getElementById("topupAlert");
-        alertBox.className = "text-xs py-1.5 px-2.5 rounded mb-3 bg-rose-500/20 text-rose-400 border border-rose-500/30 block";
-        alertBox.textContent = "Kredit gratis Anda telah habis! Masukkan voucher.";
         return;
       }
 
-      // Potong kredit jika bukan unlimited
+
+      const hasCredit =
+        credits > 0;
+
+      badge.className =
+        `text-xs px-3 py-1.5 rounded-full font-medium border ${
+          hasCredit
+            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+            : "border-rose-500/30 bg-rose-500/10 text-rose-400"
+        } flex items-center gap-1.5`;
+
+      icon.textContent =
+        hasCredit ? "⚡" : "⚠️";
+
+      text.textContent =
+        `Kredit: ${credits}/${FREE_CREDITS}`;
+    }
+
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    function openTopupModal() {
+
+      const modal =
+        document.getElementById("topupModal");
+
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      setTimeout(() => {
+
+        document
+          .getElementById("voucherCode")
+          .focus();
+
+      }, 50);
+    }
+
+
+    function closeTopupModal() {
+
+      const modal =
+        document.getElementById("topupModal");
+
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+
+      document
+        .getElementById("topupAlert")
+        .className = "hidden";
+
+      document
+        .getElementById("voucherCode")
+        .value = "";
+    }
+
+
+    function showTopupAlert(message, success = false) {
+
+      const alertBox =
+        document.getElementById("topupAlert");
+
+      alertBox.className =
+        success
+          ? "text-xs py-2 px-3 rounded-lg mb-3 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 block"
+          : "text-xs py-2 px-3 rounded-lg mb-3 bg-rose-500/20 text-rose-400 border border-rose-500/30 block";
+
+      alertBox.textContent =
+        message;
+    }
+
+
+    function redeemVoucher() {
+
+      const input =
+        document
+          .getElementById("voucherCode")
+          .value
+          .trim();
+
+      if (!input) {
+
+        showTopupAlert(
+          "Masukkan kode voucher terlebih dahulu."
+        );
+
+        return;
+      }
+
+
+      if (input === UNLIMITED_VOUCHER) {
+
+        isUnlimited = true;
+
+        saveState();
+
+        showTopupAlert(
+          "Berhasil! AsepAi sekarang Unlimited. 👑",
+          true
+        );
+
+        setTimeout(
+          closeTopupModal,
+          1000
+        );
+
+      } else {
+
+        showTopupAlert(
+          "Kode voucher tidak valid!"
+        );
+
+      }
+    }
+
+
+    /* =========================================================
+       CHAT FORM
+    ========================================================= */
+
+    document
+      .getElementById("chatForm")
+      .addEventListener(
+        "submit",
+        handleSendMessage
+      );
+
+
+    document
+      .getElementById("userInput")
+      .addEventListener(
+        "keydown",
+        function(event) {
+
+          if (
+            event.key === "Enter" &&
+            !event.shiftKey
+          ) {
+
+            event.preventDefault();
+
+            document
+              .getElementById("chatForm")
+              .requestSubmit();
+          }
+
+        }
+      );
+
+
+    /* Auto resize textarea */
+
+    document
+      .getElementById("userInput")
+      .addEventListener(
+        "input",
+        function() {
+
+          this.style.height = "auto";
+
+          this.style.height =
+            Math.min(
+              this.scrollHeight,
+              180
+            ) + "px";
+        }
+      );
+
+
+    /* =========================================================
+       SEND MESSAGE
+    ========================================================= */
+
+    async function handleSendMessage(event) {
+
+      if (event) {
+        event.preventDefault();
+      }
+
+
+      if (isGenerating) {
+        return;
+      }
+
+
+      const inputEl =
+        document.getElementById("userInput");
+
+      const sendBtn =
+        document.getElementById("sendBtn");
+
+      const text =
+        inputEl.value.trim();
+
+
+      if (!text) {
+        return;
+      }
+
+
+      /* Credit check */
+
+      if (
+        !isUnlimited &&
+        credits <= 0
+      ) {
+
+        openTopupModal();
+
+        showTopupAlert(
+          "Kredit gratis Anda telah habis! Masukkan voucher."
+        );
+
+        return;
+      }
+
+
+      /* Prevent double click */
+
+      isGenerating = true;
+
+      sendBtn.disabled = true;
+
+
+      /* Deduct credit BEFORE request */
+
       if (!isUnlimited) {
+
         credits--;
+
         saveState();
       }
 
-      // Tampilkan pesan user
-      appendMessage("user", text);
-      inputEl.value = "";
 
-      // Tampilkan placeholder bot
-      const botMsgId = appendLoadingMessage();
+      /* Add user message */
+
+      appendMessage(
+        "user",
+        text
+      );
+
+
+      inputEl.value = "";
+      inputEl.style.height = "auto";
+
+
+      /* Loading message */
+
+      const botMsgId =
+        appendLoadingMessage();
+
 
       try {
-        const responseText = await callGeminiAPI(text);
-        updateBotMessage(botMsgId, responseText);
-      } catch (err) {
-        updateBotMessage(botMsgId, `Maaf, terjadi kendala saat menghubungi API: ${err.message}`);
+
+        const responseText =
+          await callGeminiAPI(text);
+
+        updateBotMessage(
+          botMsgId,
+          responseText
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Gemini API Error:",
+          error
+        );
+
+
+        /*
+          Jika API gagal, kembalikan credit.
+        */
+
+        if (!isUnlimited) {
+
+          credits++;
+
+          saveState();
+        }
+
+
+        updateBotMessage(
+          botMsgId,
+          formatApiError(error)
+        );
+
+
+      } finally {
+
+        isGenerating = false;
+
+        sendBtn.disabled = false;
+
+        inputEl.focus();
       }
     }
 
-    function appendMessage(role, text) {
-      const chatBox = document.getElementById("chatBox");
-      const wrapper = document.createElement("div");
 
-      if (role === "user") {
-        wrapper.className = "flex justify-end gap-3";
-        wrapper.innerHTML = `
-          <div class="bg-emerald-600 text-white rounded-2xl rounded-tr-none p-3 max-w-[85%] text-sm shadow-sm leading-relaxed">
-            ${escapeHtml(text)}
-          </div>
+    /* =========================================================
+       GEMINI API
+    ========================================================= */
+
+    async function callGeminiAPI(prompt) {
+
+      /*
+        IMPORTANT:
+
+        API KEY dikirim melalui:
+
+        x-goog-api-key
+
+        Bukan Authorization Bearer.
+      */
+
+      const payload = {
+
+        contents: [
+          {
+            role: "user",
+
+            parts: [
+              {
+                text: prompt
+              }
+            ]
+          }
+        ],
+
+        generationConfig: {
+
+          temperature: 0.7,
+
+          maxOutputTokens: 2048
+
+        }
+
+      };
+
+
+      let response;
+
+
+      try {
+
+        response =
+          await fetch(
+            GEMINI_ENDPOINT,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                "x-goog-api-key":
+                  GEMINI_API_KEY
+              },
+
+              body:
+                JSON.stringify(payload)
+            }
+          );
+
+      } catch (networkError) {
+
+        throw new Error(
+          "Gagal terhubung ke server Gemini. Periksa koneksi internet atau CORS."
+        );
+      }
+
+
+      const rawText =
+        await response.text();
+
+
+      let data = null;
+
+
+      try {
+
+        data =
+          rawText
+            ? JSON.parse(rawText)
+            : null;
+
+      } catch {
+
+        throw new Error(
+          `Gemini mengirim response yang tidak valid. HTTP ${response.status}`
+        );
+      }
+
+
+      /* HTTP error */
+
+      if (!response.ok) {
+
+        const apiError =
+          data?.error;
+
+        const message =
+          apiError?.message ||
+          `Gemini API gagal. HTTP ${response.status}`;
+
+
+        const reason =
+          apiError?.details
+            ?.map(
+              detail =>
+                detail?.reason
+            )
+            .filter(Boolean)
+            .join(", ");
+
+
+        if (reason) {
+
+          throw new Error(
+            `${message} (${reason})`
+          );
+
+        }
+
+
+        throw new Error(
+          message
+        );
+      }
+
+
+      /* Safety / blocked response */
+
+      if (
+        data?.promptFeedback?.blockReason
+      ) {
+
+        throw new Error(
+          `Prompt diblokir oleh Gemini: ${data.promptFeedback.blockReason}`
+        );
+      }
+
+
+      const candidates =
+        data?.candidates;
+
+
+      if (
+        !Array.isArray(candidates) ||
+        candidates.length === 0
+      ) {
+
+        throw new Error(
+          "Gemini tidak mengembalikan candidate."
+        );
+      }
+
+
+      const candidate =
+        candidates[0];
+
+
+      if (
+        candidate?.finishReason ===
+        "SAFETY"
+      ) {
+
+        throw new Error(
+          "Jawaban diblokir oleh sistem keamanan Gemini."
+        );
+      }
+
+
+      const parts =
+        candidate?.content?.parts;
+
+
+      const result =
+        Array.isArray(parts)
+          ? parts
+              .map(
+                part =>
+                  part?.text || ""
+              )
+              .join("")
+              .trim()
+          : "";
+
+
+      if (!result) {
+
+        throw new Error(
+          "Gemini tidak mengembalikan teks."
+        );
+      }
+
+
+      return result;
+    }
+
+
+    /* =========================================================
+       ERROR FORMAT
+    ========================================================= */
+
+    function formatApiError(error) {
+
+      const message =
+        error?.message ||
+        "Kesalahan tidak diketahui.";
+
+
+      if (
+        message.includes(
+          "ACCESS_TOKEN_TYPE_UNSUPPORTED"
+        ) ||
+        message.includes(
+          "Expected OAuth"
+        )
+      ) {
+
+        return `
+**Gemini menolak kredensial API (401).**
+
+Request AsepAi sudah menggunakan format:
+
+\`x-goog-api-key\`
+
+dan bukan OAuth Bearer.
+
+Kemungkinan penyebab:
+- API key tidak valid atau terpotong.
+- API key/proyek Google belum terhubung dengan Gemini API.
+- Ada masalah provisioning pada key \`AQ.\`.
+- Key telah dinonaktifkan/diblokir.
+
+Cek API key di Google AI Studio lalu coba key yang baru.
         `;
       }
-      chatBox.appendChild(wrapper);
-      chatBox.scrollTop = chatBox.scrollHeight;
+
+
+      if (
+        message.includes(
+          "RESOURCE_EXHAUSTED"
+        ) ||
+        message.includes(
+          "429"
+        )
+      ) {
+
+        return `
+**Quota Gemini sedang habis.**
+
+Silakan tunggu sampai quota tersedia kembali atau gunakan project/API key dengan quota yang sesuai.
+        `;
+      }
+
+
+      if (
+        message.includes(
+          "PERMISSION_DENIED"
+        ) ||
+        message.includes(
+          "403"
+        )
+      ) {
+
+        return `
+**Akses Gemini ditolak (403).**
+
+Periksa konfigurasi project dan pembatasan API key di Google AI Studio.
+        `;
+      }
+
+
+      return `
+**Maaf, terjadi kendala saat menghubungi Gemini.**
+
+\`${escapeHtml(message)}\`
+      `;
     }
 
+
+    /* =========================================================
+       USER MESSAGE
+    ========================================================= */
+
+    function appendMessage(
+      role,
+      text
+    ) {
+
+      const chatBox =
+        document.getElementById("chatBox");
+
+      const wrapper =
+        document.createElement("div");
+
+
+      wrapper.className =
+        "flex justify-end gap-3 message-enter";
+
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className =
+        "bg-emerald-600 text-white rounded-2xl rounded-tr-none p-3 max-w-[85%] text-sm shadow-sm leading-relaxed whitespace-pre-wrap break-words";
+
+
+      bubble.textContent =
+        text;
+
+
+      wrapper.appendChild(
+        bubble
+      );
+
+      chatBox.appendChild(
+        wrapper
+      );
+
+
+      scrollToBottom();
+    }
+
+
+    /* =========================================================
+       LOADING MESSAGE
+    ========================================================= */
+
     function appendLoadingMessage() {
-      const chatBox = document.getElementById("chatBox");
-      const id = "msg-" + Date.now();
-      const wrapper = document.createElement("div");
+
+      const chatBox =
+        document.getElementById("chatBox");
+
+
+      const id =
+        "msg-" +
+        Date.now() +
+        "-" +
+        Math.random()
+          .toString(36)
+          .slice(2);
+
+
+      const wrapper =
+        document.createElement("div");
+
+
       wrapper.id = id;
-      wrapper.className = "flex gap-3";
+
+      wrapper.className =
+        "flex gap-3 message-enter";
+
+
       wrapper.innerHTML = `
+
         <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-400 font-bold text-sm">
           A
         </div>
+
         <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-3 max-w-[85%] text-slate-300 text-sm shadow-sm flex items-center gap-2">
-          <span class="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span>
-          <span class="text-slate-400">AsepAi sedang berpikir...</span>
+
+          <div class="flex gap-1">
+            <span class="typing-dot w-2 h-2 bg-emerald-400 rounded-full"></span>
+            <span class="typing-dot w-2 h-2 bg-emerald-400 rounded-full"></span>
+            <span class="typing-dot w-2 h-2 bg-emerald-400 rounded-full"></span>
+          </div>
+
+          <span class="text-slate-400">
+            AsepAi sedang berpikir...
+          </span>
+
         </div>
       `;
-      chatBox.appendChild(wrapper);
-      chatBox.scrollTop = chatBox.scrollHeight;
+
+
+      chatBox.appendChild(
+        wrapper
+      );
+
+
+      scrollToBottom();
+
+
       return id;
     }
 
-    function updateBotMessage(msgId, markdownText) {
-      const el = document.getElementById(msgId);
-      if (!el) return;
 
-      const htmlContent = marked.parse(markdownText);
+    /* =========================================================
+       BOT MESSAGE
+    ========================================================= */
+
+    function updateBotMessage(
+      msgId,
+      markdownText
+    ) {
+
+      const el =
+        document.getElementById(
+          msgId
+        );
+
+
+      if (!el) {
+        return;
+      }
+
+
+      /*
+        marked digunakan untuk render Markdown.
+      */
+
+      const htmlContent =
+        marked.parse(
+          markdownText,
+          {
+            breaks: true
+          }
+        );
+
+
       el.innerHTML = `
+
         <div class="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-400 font-bold text-sm">
           A
         </div>
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-slate-200 text-sm shadow-sm leading-relaxed prose prose-invert max-w-none">
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-none p-4 max-w-[85%] text-slate-200 text-sm shadow-sm leading-relaxed prose prose-invert max-w-none break-words">
+
           ${htmlContent}
+
         </div>
       `;
-      const chatBox = document.getElementById("chatBox");
-      chatBox.scrollTop = chatBox.scrollHeight;
+
+
+      scrollToBottom();
     }
 
-    async function callGeminiAPI(prompt) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-      
-      const payload = {
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
-      };
 
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
+    /* =========================================================
+       SCROLL
+    ========================================================= */
+
+    function scrollToBottom() {
+
+      const chatBox =
+        document.getElementById(
+          "chatBox"
+        );
+
+
+      requestAnimationFrame(() => {
+
+        chatBox.scrollTo({
+          top:
+            chatBox.scrollHeight,
+
+          behavior:
+            "smooth"
+        });
+
       });
-
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error?.message || `HTTP Status ${response.status}`);
-      }
-
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "Tidak ada jawaban dari AI.";
     }
+
+
+    /* =========================================================
+       HTML ESCAPE
+    ========================================================= */
 
     function escapeHtml(string) {
-      const div = document.createElement('div');
-      div.innerText = string;
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.textContent =
+        String(string);
+
       return div.innerHTML;
     }
+
+
+    /* =========================================================
+       MODAL CLICK OUTSIDE
+    ========================================================= */
+
+    document
+      .getElementById("topupModal")
+      .addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            event.target === this
+          ) {
+
+            closeTopupModal();
+          }
+
+        }
+      );
+
+
+    /* =========================================================
+       ESC CLOSE MODAL
+    ========================================================= */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          const modal =
+            document.getElementById(
+              "topupModal"
+            );
+
+
+          if (
+            !modal.classList.contains(
+              "hidden"
+            )
+          ) {
+
+            closeTopupModal();
+          }
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================= */
+
+    renderCreditBadge();
+
   </script>
+
 </body>
 </html>
