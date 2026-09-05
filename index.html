@@ -1,39 +1,77 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asep AI — Next-Gen Intelligence</title>
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfeff',
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Marked.js untuk Markdown AI (Bolds, Lists, Code blocks) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
-        body {
+        * {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #07090e;
-            color: #e2e8f0;
+        }
+
+        code, pre {
+            font-family: 'JetBrains Mono', monospace;
         }
 
         /* Ambient Glow & Background effects */
-        .ambient-glow {
-            background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, rgba(147, 51, 234, 0.1) 45%, transparent 80%);
+        body {
+            background-color: #07090e;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
         }
 
         /* Glassmorphism */
-        .glass-card {
-            background: rgba(15, 23, 42, 0.65);
+        .glass-panel {
+            background: rgba(13, 18, 30, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
+        .glass-card {
+            background: rgba(18, 24, 38, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
+            height: 5px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
@@ -43,163 +81,191 @@
             border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.3);
         }
 
-        /* Typing Dots Animation */
-        .dot-flashing {
-            position: relative;
-            width: 6px;
-            height: 6px;
-            border-radius: 5px;
-            background-color: #38bdf8;
-            color: #38bdf8;
-            animation: dot-flashing 1s infinite linear alternate;
-            animation-delay: 0.5s;
-        }
-        .dot-flashing::before, .dot-flashing::after {
-            content: "";
-            display: inline-block;
-            position: absolute;
-            top: 0;
-            width: 6px;
-            height: 6px;
-            border-radius: 5px;
-            background-color: #38bdf8;
+        /* Markdown Styling di dalam Bubble Chat */
+        .markdown-body p { margin-bottom: 0.75rem; }
+        .markdown-body p:last-child { margin-bottom: 0; }
+        .markdown-body ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.75rem; }
+        .markdown-body ol { list-style-type: decimal; margin-left: 1.25rem; margin-bottom: 0.75rem; }
+        .markdown-body strong { color: #38bdf8; font-weight: 600; }
+        .markdown-body code:not(pre code) {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.15rem 0.35rem;
+            border-radius: 0.375rem;
+            font-size: 0.85em;
             color: #38bdf8;
         }
-        .dot-flashing::before {
-            left: -10px;
-            animation: dot-flashing 1s infinite alternate;
-            animation-delay: 0s;
+        .markdown-body pre {
+            background: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 0.85rem;
+            overflow-x: auto;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
         }
-        .dot-flashing::after {
-            left: 10px;
-            animation: dot-flashing 1s infinite alternate;
-            animation-delay: 1s;
+
+        /* Animasi Dot Pulsing */
+        .dot-bounce {
+            animation: bounce 1.4s infinite ease-in-out both;
         }
-        @keyframes dot-flashing {
-            0% { background-color: #38bdf8; }
-            50%, 100% { background-color: rgba(56, 189, 248, 0.2); }
+        .dot-bounce:nth-child(1) { animation-delay: -0.32s; }
+        .dot-bounce:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+            40% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
-<body class="h-screen flex flex-col justify-between overflow-hidden ambient-glow">
+<body class="h-screen flex flex-col justify-between overflow-hidden text-slate-100 antialiased">
 
-    <!-- Top Navigation -->
-    <header class="w-full glass-card border-b border-white/10 px-6 py-4 flex items-center justify-between z-20">
+    <!-- Top Navigation Bar -->
+    <header class="w-full glass-panel border-b border-white/[0.08] px-4 lg:px-12 py-3.5 flex items-center justify-between z-30">
         <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-fuchsia-500 p-[1.5px] shadow-lg shadow-indigo-500/20">
-                <div class="w-full h-full bg-[#0b0f19] rounded-[10px] flex items-center justify-center">
+            <div class="relative group">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-2xl blur opacity-60 group-hover:opacity-100 transition duration-300"></div>
+                <div class="relative w-10 h-10 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-center">
                     <i class="fa-solid fa-bolt-lightning text-cyan-400 text-lg"></i>
                 </div>
             </div>
             <div>
-                <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-                    Asep <span class="text-cyan-400">AI</span>
-                </h1>
-                <p class="text-[11px] text-slate-400 font-medium tracking-wide flex items-center gap-1.5">
-                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    Online v2.5
+                <div class="flex items-center gap-2">
+                    <h1 class="font-extrabold text-base tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                        Asep<span class="text-cyan-400">AI</span>
+                    </h1>
+                    <span class="text-[10px] px-2 py-0.5 rounded-md font-mono bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">PRO v2.5</span>
+                </div>
+                <p class="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-[0_0_8px_#34d399]"></span>
+                    Engine Siap Melayani
                 </p>
             </div>
         </div>
 
-        <!-- Quota Tracker & Topup Trigger -->
-        <div class="flex items-center space-x-3">
-            <div class="glass-card px-3.5 py-1.5 rounded-full flex items-center space-x-2 border border-slate-700/60 shadow-inner">
+        <!-- Quota Tracker & Top Up Action -->
+        <div class="flex items-center space-x-2.5">
+            <div class="glass-card px-3.5 py-1.5 rounded-xl flex items-center space-x-2 border border-slate-700/50">
                 <i class="fa-solid fa-coins text-amber-400 text-xs"></i>
-                <span class="text-xs font-semibold text-slate-300">Limit:</span>
-                <span id="limitCount" class="text-xs font-bold text-cyan-400">2</span>
+                <span class="text-xs text-slate-400 font-medium">Sisa Limit:</span>
+                <span id="limitCount" class="text-xs font-bold text-cyan-400 font-mono">2</span>
             </div>
-            <button onclick="openModal()" class="px-4 py-1.5 rounded-full text-xs font-bold bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white transition-all duration-200 shadow-md shadow-cyan-500/25 flex items-center gap-1.5 active:scale-95">
-                <i class="fa-solid fa-key"></i> Top Up
+            <button onclick="openModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:brightness-110 text-white transition-all shadow-md shadow-cyan-500/20 flex items-center gap-1.5 active:scale-95">
+                <i class="fa-solid fa-ticket"></i>
+                <span>Top Up</span>
             </button>
         </div>
     </header>
 
-    <!-- Main Chat Screen -->
-    <main id="chatBox" class="flex-1 overflow-y-auto px-4 py-6 md:px-24 lg:px-64 space-y-6">
-        <!-- Hero / Welcome Placeholder -->
-        <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-center py-12">
+    <!-- Main Chat Messages Screen -->
+    <main id="chatBox" class="flex-1 overflow-y-auto px-4 py-6 md:px-20 lg:px-64 space-y-6 scroll-smooth">
+        <!-- Welcome Screen (Akan hilang saat chat pertama dikirim) -->
+        <div id="welcomeScreen" class="min-h-[70vh] flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8">
             <div class="relative mb-6">
-                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-full blur-xl opacity-40 animate-pulse"></div>
-                <div class="relative w-20 h-20 rounded-full bg-slate-900 border border-slate-700/80 flex items-center justify-center text-cyan-400 shadow-2xl">
+                <div class="absolute -inset-2 bg-gradient-to-r from-cyan-500 via-indigo-500 to-fuchsia-500 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
+                <div class="relative w-20 h-20 rounded-2xl bg-slate-900/90 border border-white/10 flex items-center justify-center text-cyan-400 shadow-2xl">
                     <i class="fa-solid fa-brain text-3xl"></i>
                 </div>
             </div>
-            <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-white mb-2">
-                Halo! Mau tanya apa ke <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Asep AI</span>?
+
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white mb-2">
+                Ada yang bisa dibantu, <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Kawan?</span>
             </h2>
-            <p class="text-slate-400 text-sm max-w-md mx-auto mb-6">
-                Akun gratis memiliki jatah <span class="text-cyan-300 font-semibold">2 kali pertanyaan</span>. Masukkan topup code jika limit habis.
+            <p class="text-slate-400 text-xs md:text-sm max-w-md mx-auto mb-8 leading-relaxed">
+                Tanyakan pertanyaan koding, riset, atau minta rekomendasi santai. Sisa limit gratis Anda adalah <span class="text-cyan-300 font-semibold" id="welcomeLimitBadge">2 kueri</span>.
             </p>
-            <!-- Suggestions -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-md w-full">
-                <button onclick="quickPrompt('Apa itu Artificial Intelligence?')" class="text-left glass-card hover:border-cyan-500/40 p-3 rounded-xl text-xs text-slate-300 hover:text-white transition">
-                    💡 "Apa itu Artificial Intelligence?"
+
+            <!-- Quick Suggestions -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                <button onclick="quickPrompt('Buatkan template resume profesional untuk pemula')" class="text-left glass-card hover:border-cyan-500/40 p-3.5 rounded-xl group transition-all duration-200 hover:-translate-y-0.5">
+                    <span class="text-cyan-400 text-sm block mb-1">📄 Format Karir</span>
+                    <p class="text-xs text-slate-300 group-hover:text-white">"Buatkan template resume profesional pemula"</p>
                 </button>
-                <button onclick="quickPrompt('Buatkan pantun lucu tentang programmer')" class="text-left glass-card hover:border-cyan-500/40 p-3 rounded-xl text-xs text-slate-300 hover:text-white transition">
-                    🎭 "Pantun lucu programmer"
+
+                <button onclick="quickPrompt('Jelaskan konsep Asynchronous di JavaScript secara sederhana')" class="text-left glass-card hover:border-cyan-500/40 p-3.5 rounded-xl group transition-all duration-200 hover:-translate-y-0.5">
+                    <span class="text-indigo-400 text-sm block mb-1">⚡ Pemrograman</span>
+                    <p class="text-xs text-slate-300 group-hover:text-white">"Jelaskan Asynchronous JS secara simpel"</p>
+                </button>
+
+                <button onclick="quickPrompt('Tuliskan pantun jenaka sindiran untuk programmer yang suka begadang')" class="text-left glass-card hover:border-cyan-500/40 p-3.5 rounded-xl group transition-all duration-200 hover:-translate-y-0.5">
+                    <span class="text-fuchsia-400 text-sm block mb-1">🎭 Kreatif & Lucu</span>
+                    <p class="text-xs text-slate-300 group-hover:text-white">"Pantun sindiran programmer hobi begadang"</p>
+                </button>
+
+                <button onclick="quickPrompt('Berikan 5 ide usaha modal kecil dengan keuntungan cepat')" class="text-left glass-card hover:border-cyan-500/40 p-3.5 rounded-xl group transition-all duration-200 hover:-translate-y-0.5">
+                    <span class="text-emerald-400 text-sm block mb-1">💡 Ide Bisnis</span>
+                    <p class="text-xs text-slate-300 group-hover:text-white">"5 ide usaha modal minim keuntungan cepat"</p>
                 </button>
             </div>
         </div>
     </main>
 
     <!-- Bottom Input Container -->
-    <footer class="p-4 md:px-24 lg:px-64 z-20">
+    <footer class="p-4 md:px-20 lg:px-64 z-20">
         <div class="max-w-4xl mx-auto">
-            <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-center glass-card rounded-2xl p-1.5 focus-within:ring-2 focus-within:ring-cyan-400/50 shadow-2xl transition-all">
-                <input 
-                    type="text" 
+            <form id="chatForm" onsubmit="handleChatSubmit(event)" class="relative flex items-end glass-panel rounded-2xl p-2 border border-slate-700/60 focus-within:border-cyan-500/60 focus-within:ring-2 focus-within:ring-cyan-500/20 shadow-2xl transition-all duration-300">
+                
+                <textarea 
                     id="userInput"
-                    placeholder="Ketik pesan Anda untuk Asep AI..." 
-                    class="w-full bg-transparent px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none"
-                    autocomplete="off"
-                />
+                    rows="1"
+                    placeholder="Tanya apa saja ke Asep AI... (Enter untuk kirim, Shift+Enter untuk baris baru)" 
+                    class="w-full bg-transparent px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none resize-none max-h-36 overflow-y-auto leading-relaxed"
+                    onkeydown="handleKeyDown(event)"
+                    oninput="autoResize(this)"></textarea>
+
                 <button 
                     type="submit" 
                     id="sendBtn"
-                    class="h-10 w-10 flex-shrink-0 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white flex items-center justify-center transition shadow-lg shadow-cyan-500/20 active:scale-95 disabled:opacity-50">
+                    class="h-10 w-10 flex-shrink-0 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 hover:brightness-110 text-white flex items-center justify-center transition shadow-lg shadow-cyan-500/20 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed ml-2">
                     <i class="fa-solid fa-arrow-up text-sm"></i>
                 </button>
             </form>
-            <div class="flex justify-between items-center px-3 mt-2 text-[11px] text-slate-500">
-                <span>Ditenagai oleh GitaGPT Engine</span>
-                <span id="warningQuota" class="hidden text-rose-400 font-semibold">Limit Anda habis! Topup untuk lanjut.</span>
+
+            <div class="flex justify-between items-center px-2 mt-2 text-[11px] text-slate-500">
+                <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-shield-halved text-cyan-500/80"></i> GitaGPT Smart Engine
+                </span>
+                <span id="warningQuota" class="hidden text-rose-400 font-medium animate-pulse">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> Limit habis! Klik 'Top Up' untuk klaim kuota.
+                </span>
             </div>
         </div>
     </footer>
 
     <!-- Modal Top Up -->
-    <div id="topupModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-card max-w-sm w-full p-6 rounded-3xl border border-slate-700/80 shadow-2xl relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-lg"></i>
+    <div id="topupModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-slate-950/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-white/10 shadow-2xl relative transform transition-transform scale-95 duration-300" id="modalBox">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xl mb-4 shadow-lg shadow-cyan-500/30">
-                <i class="fa-solid fa-unlock-keyhole"></i>
+            
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white text-xl mb-4 shadow-lg shadow-cyan-500/30">
+                <i class="fa-solid fa-key"></i>
             </div>
-            <h3 class="text-xl font-bold text-white mb-1">Top Up Kuota AI</h3>
+            
+            <h3 class="text-lg font-bold text-white mb-1">Top Up Kuota Prompts</h3>
             <p class="text-xs text-slate-400 mb-5 leading-relaxed">
-                Masukkan kode aktivasi rahasia untuk menambahkan <strong>+10 Kuota</strong> penggunaan prompt.
+                Gunakan kode voucher rahasia untuk langsung mendapatkan tambahan <span class="text-cyan-300 font-semibold">+10 Limit Pertanyaan</span>.
             </p>
             
-            <div class="space-y-3">
+            <div class="space-y-3.5">
                 <div>
-                    <label class="text-[11px] font-semibold text-slate-300 uppercase tracking-wider block mb-1">Kode Topup</label>
+                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">Kode Voucher</label>
                     <input 
                         type="text" 
                         id="topupCode"
-                        placeholder="Masukkan kode..." 
-                        class="w-full bg-slate-900/90 border border-slate-700/70 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none transition uppercase"
+                        placeholder="Ketik kode (cth: Rudiblack)..." 
+                        class="w-full bg-slate-900 border border-slate-700/80 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none transition font-mono tracking-wider"
                     />
                 </div>
-                <div id="modalAlert" class="text-xs hidden font-medium"></div>
+
+                <div id="modalAlert" class="text-xs hidden font-medium p-2.5 rounded-lg"></div>
+
                 <button 
                     onclick="redeemCode()" 
-                    class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 font-semibold text-sm text-white shadow-lg shadow-cyan-500/25 transition active:scale-95">
-                    Klaim Kuota Sekarang
+                    class="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:brightness-110 font-semibold text-sm text-white shadow-lg shadow-cyan-500/25 transition active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> Klaim Kuota
                 </button>
             </div>
         </div>
@@ -210,7 +276,7 @@
         const SECRET_CODE = "Rudiblack";
         const DEFAULT_LIMIT = 2;
 
-        // Inisialisasi kuota dari LocalStorage
+        // Inisialisasi Kuota
         let currentLimit = localStorage.getItem('asep_ai_limit');
         if (currentLimit === null) {
             currentLimit = DEFAULT_LIMIT;
@@ -223,8 +289,11 @@
 
         function updateLimitDisplay() {
             const el = document.getElementById('limitCount');
+            const badge = document.getElementById('welcomeLimitBadge');
             const warnEl = document.getElementById('warningQuota');
+            
             el.textContent = currentLimit;
+            if (badge) badge.textContent = `${currentLimit} kueri`;
 
             if (currentLimit <= 0) {
                 el.classList.remove('text-cyan-400');
@@ -237,9 +306,70 @@
             }
         }
 
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 140) + 'px';
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                document.getElementById('chatForm').requestSubmit();
+            }
+        }
+
         function quickPrompt(text) {
-            document.getElementById('userInput').value = text;
+            const input = document.getElementById('userInput');
+            input.value = text;
+            autoResize(input);
             handleChatSubmit(new Event('submit'));
+        }
+
+        // ==========================================================
+        // FITUR PENTING: Fix Bug "Object" / [object Object]
+        // Fungsi Rekursif untuk mengekstrak string teks dari API apa pun
+        // ==========================================================
+        function extractAiText(data) {
+            if (data === null || data === undefined) return "Tidak ada tanggapan dari server.";
+            if (typeof data === 'string') return data.trim();
+            if (typeof data === 'number' || typeof data === 'boolean') return String(data);
+
+            // Jika API merespons berupa Array
+            if (Array.isArray(data)) {
+                if (data.length === 0) return "Hasil kosong.";
+                return extractAiText(data[0]);
+            }
+
+            // Jika API merespons berupa Objek, periksa kunci-kunci umum secara berurutan
+            if (typeof data === 'object') {
+                const priorityKeys = [
+                    'reply', 'text', 'answer', 'response', 'message', 
+                    'result', 'content', 'output', 'data'
+                ];
+
+                for (const key of priorityKeys) {
+                    if (data[key] !== undefined && data[key] !== null) {
+                        const extracted = extractAiText(data[key]);
+                        if (extracted && extracted !== '[object Object]') {
+                            return extracted;
+                        }
+                    }
+                }
+
+                // Cek format OpenAI (choices[0].message.content)
+                if (data.choices && Array.isArray(data.choices) && data.choices.length > 0) {
+                    return extractAiText(data.choices[0].message?.content || data.choices[0].text);
+                }
+
+                // Jika tidak ada key yang cocok, convert ke JSON yang rapi daripada tampil [object Object]
+                try {
+                    return JSON.stringify(data, null, 2);
+                } catch (e) {
+                    return "Gagal memproses struktur respon.";
+                }
+            }
+
+            return String(data);
         }
 
         async function handleChatSubmit(e) {
@@ -248,10 +378,10 @@
             const query = inputEl.value.trim();
             if (!query) return;
 
-            // Cek batasan kuota
+            // Cek Limit
             if (currentLimit <= 0) {
                 openModal();
-                showModalAlert("Limit Anda telah habis (0). Masukkan kode topup untuk melanjutkan!", "error");
+                showModalAlert("⚠️ Kuota Anda habis (0). Masukkan kode voucher untuk klaim limit!", "error");
                 return;
             }
 
@@ -260,69 +390,76 @@
             localStorage.setItem('asep_ai_limit', currentLimit);
             updateLimitDisplay();
 
-            // Sembunyikan welcome screen jika chat pertama kali
+            // Sembunyikan welcome screen
             const welcome = document.getElementById('welcomeScreen');
             if (welcome) welcome.remove();
 
             // Render Pesan User
             appendMessage(query, 'user');
             inputEl.value = '';
+            inputEl.style.height = 'auto';
 
-            // Render Loading Indicator
+            // Loading state
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
             const loadingId = appendLoading();
 
             try {
-                // Fetch ke API GitaGPT SynoxCloud
                 const url = `https://api.synoxcloud.xyz/ai-chat/gitagpt-ai?q=${encodeURIComponent(query)}&apikey=FREE`;
                 const response = await fetch(url);
                 
-                if (!response.ok) throw new Error("Gagal mengambil data dari server Asep AI.");
+                if (!response.ok) {
+                    throw new Error(`Server merespon dengan status ${response.status}`);
+                }
                 
                 const data = await response.json();
                 
-                // Parsing response fleksibel
-                let reply = "Maaf, respon tidak dapat dibaca dari server.";
-                if (typeof data === 'string') {
-                    reply = data;
-                } else if (data.result) {
-                    reply = data.result;
-                } else if (data.response) {
-                    reply = data.response;
-                } else if (data.message) {
-                    reply = data.message;
-                } else {
-                    reply = JSON.stringify(data);
-                }
+                // Menggunakan fungsi pembersih objek
+                const rawReply = extractAiText(data);
 
                 removeMessage(loadingId);
-                appendMessage(reply, 'bot');
+                appendMessage(rawReply, 'bot');
             } catch (err) {
                 removeMessage(loadingId);
-                appendMessage(`⚠️ Terjadi kesalahan: ${err.message}`, 'bot');
+                appendMessage(`⚠️ Terjadi gangguan koneksi: ${err.message}. Silakan coba beberapa saat lagi.`, 'bot');
+            } finally {
+                sendBtn.disabled = false;
             }
         }
 
         function appendMessage(text, sender) {
             const chatBox = document.getElementById('chatBox');
+            const msgId = 'msg-' + Date.now();
             const div = document.createElement('div');
+            div.id = msgId;
             div.className = `flex gap-3.5 leading-relaxed ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
 
             if (sender === 'user') {
                 div.innerHTML = `
-                    <div class="max-w-[80%] bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl rounded-tr-none px-4 py-3 shadow-md shadow-cyan-600/10 text-sm">
+                    <div class="max-w-[85%] md:max-w-[75%] bg-gradient-to-tr from-cyan-600 to-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-lg shadow-cyan-900/20 text-sm whitespace-pre-wrap">
                         ${escapeHtml(text)}
                     </div>
-                    <div class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-xs flex-shrink-0">
-                        <i class="fa-solid fa-user text-slate-300"></i>
+                    <div class="w-8 h-8 rounded-xl bg-slate-800 border border-white/10 flex items-center justify-center text-xs flex-shrink-0 text-slate-300">
+                        <i class="fa-solid fa-user"></i>
                     </div>
                 `;
             } else {
+                // Parse markdown agar list, bold, dan code block rapi
+                const parsedHtml = marked.parse(text);
+
                 div.innerHTML = `
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0 shadow-md">
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0 shadow-md shadow-cyan-500/20 mt-1">
                         <i class="fa-solid fa-robot"></i>
                     </div>
-                    <div class="max-w-[80%] glass-card rounded-2xl rounded-tl-none px-4 py-3 border border-slate-700/50 text-slate-200 text-sm">
-                        ${escapeHtml(text).replace(/\n/g, '<br>')}
+                    <div class="max-w-[85%] md:max-w-[80%] group">
+                        <div class="glass-card rounded-2xl rounded-tl-sm px-4 py-3.5 border border-white/[0.08] text-slate-200 text-sm markdown-body shadow-sm">
+                            ${parsedHtml}
+                        </div>
+                        <div class="mt-1.5 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition duration-200">
+                            <button onclick="copyToClipboard('${msgId}', this)" class="text-[11px] text-slate-400 hover:text-cyan-400 px-2 py-1 rounded bg-white/5 hover:bg-white/10 transition flex items-center gap-1">
+                                <i class="fa-regular fa-copy"></i> Salin Respon
+                            </button>
+                        </div>
                     </div>
                 `;
             }
@@ -338,11 +475,13 @@
             div.id = loadingId;
             div.className = "flex gap-3.5 justify-start";
             div.innerHTML = `
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-xs text-white flex-shrink-0">
                     <i class="fa-solid fa-robot"></i>
                 </div>
-                <div class="glass-card rounded-2xl rounded-tl-none px-5 py-4 border border-slate-700/50 flex items-center">
-                    <div class="dot-flashing ml-3 mr-3"></div>
+                <div class="glass-card rounded-2xl rounded-tl-sm px-5 py-4 border border-white/[0.08] flex items-center space-x-1.5">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 dot-bounce"></span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 dot-bounce"></span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 dot-bounce"></span>
                 </div>
             `;
             chatBox.appendChild(div);
@@ -355,42 +494,67 @@
             if (el) el.remove();
         }
 
-        // Modal Logic & Redeem
+        function copyToClipboard(elementId, btn) {
+            const container = document.getElementById(elementId);
+            const markdownEl = container.querySelector('.markdown-body');
+            const textToCopy = markdownEl ? markdownEl.innerText : '';
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Tersalin!`;
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                }, 2000);
+            });
+        }
+
+        // Modal Logic
         function openModal() {
             const modal = document.getElementById('topupModal');
+            const box = document.getElementById('modalBox');
             modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                box.classList.remove('scale-95');
+                box.classList.add('scale-100');
+            }, 10);
             document.getElementById('topupCode').value = '';
             document.getElementById('modalAlert').classList.add('hidden');
         }
 
         function closeModal() {
             const modal = document.getElementById('topupModal');
+            const box = document.getElementById('modalBox');
             modal.classList.add('opacity-0');
+            box.classList.remove('scale-100');
+            box.classList.add('scale-95');
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
         function redeemCode() {
             const input = document.getElementById('topupCode').value.trim();
             
-            if (input === SECRET_CODE) {
-                currentLimit += 10; // Menambahkan 10 limit
+            if (input.toLowerCase() === SECRET_CODE.toLowerCase()) {
+                currentLimit += 10;
                 localStorage.setItem('asep_ai_limit', currentLimit);
                 updateLimitDisplay();
-                showModalAlert("🎉 Topup Berhasil! +10 Limit telah ditambahkan ke akun Anda.", "success");
-                setTimeout(() => {
-                    closeModal();
-                }, 1400);
+                showModalAlert("🎉 Top Up Sukses! +10 Limit berhasil ditambahkan.", "success");
+                setTimeout(() => closeModal(), 1300);
             } else {
-                showModalAlert("❌ Kode voucher salah! Silakan coba lagi.", "error");
+                showModalAlert("❌ Kode voucher tidak valid!", "error");
             }
         }
 
         function showModalAlert(msg, type) {
             const alertEl = document.getElementById('modalAlert');
             alertEl.textContent = msg;
-            alertEl.classList.remove('hidden', 'text-emerald-400', 'text-rose-400');
-            alertEl.classList.add(type === 'success' ? 'text-emerald-400' : 'text-rose-400');
+            alertEl.classList.remove('hidden', 'bg-emerald-500/10', 'text-emerald-400', 'border-emerald-500/20', 'bg-rose-500/10', 'text-rose-400', 'border-rose-500/20');
+            
+            if (type === 'success') {
+                alertEl.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/20');
+            } else {
+                alertEl.classList.add('bg-rose-500/10', 'text-rose-400', 'border', 'border-rose-500/20');
+            }
         }
 
         function escapeHtml(string) {
